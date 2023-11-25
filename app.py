@@ -4,9 +4,12 @@ from flask_restful import Api
 from src.routes import initialize_routes
 from flask_swagger_ui import get_swaggerui_blueprint
 import json
+from dotenv import load_dotenv
+import os
 
 app = Flask(__name__)
 api = Api(app)
+load_dotenv()
 
 SWAGGER_URL = '/swagger'
 API_URL = '/swagger.json'
@@ -27,7 +30,11 @@ def swagger():
 
 initialize_routes(api)
 
-app.run(debug=True)
+if __name__ == '__main__':
+    if os.getenv("ENV") == "dev":
+        app.run(debug=True)
+    else:
+        app.run()
 
 
 

@@ -15,6 +15,17 @@
         "get": {
           "summary": "Get all customers",
           "tags": ["Customer"],
+          "parameters": [
+            {
+                "name": "auth_token",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
           "responses": {
             "200": {
               "description": "Successful operation",
@@ -39,6 +50,17 @@
         "post": {
             "summary": "Add new customer",
             "tags": ["Customer"],
+            "parameters": [
+                {
+                    "name": "auth_token",
+                    "in": "header",
+                    "description": "Auth Token",
+                    "required": true,
+                    "schema": {
+                      "type": "string"
+                    }
+                }
+              ],
             "requestBody": {
                 "required": true,
                 "content": {
@@ -47,28 +69,32 @@
                     "type": "object",
                     "properties": {
                         "customer_code": {
-                        "type": "string"
+                            "type": "string"
                         },
                         "name": {
-                        "type": "string"
+                            "type": "string"
                         },
                         "address": {
-                        "type": "string"
+                            "type": "string"
                         },
                         "contact": {
-                        "type": "object",
-                        "properties": {
-                            "name": {
-                            "type": "string"
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "phone": {
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string"
+                                }
                             },
-                            "phone": {
-                            "type": "string"
-                            },
-                            "email": {
-                            "type": "string"
-                            }
-                        },
                         "required": ["name", "phone", "email"]
+                        },
+                        "status": {
+                            "type": "integer",
+                            "default":1
                         }
                     },
                     "required": ["customer_code", "name", "address", "contact"]
@@ -99,7 +125,16 @@
                 "type": "string"
               },
               "description": "ID of the customer"
-            }
+            },
+            {
+                "name": "auth_token",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
           ],
           "responses": {
             "200": {
@@ -129,7 +164,16 @@
                 "type": "string"
               },
               "description": "ID of the customer"
-            }
+            },
+            {
+                "name": "auth_token",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
           ],
           "requestBody": {
             "required": true,
@@ -160,6 +204,10 @@
                           "type": "string"
                         }
                       }
+                    },
+                    "status": {
+                        "type": "integer",
+                        "default":1
                     }
                   }
                 }
@@ -190,7 +238,16 @@
                 "type": "string"
               },
               "description": "ID of the customer"
-            }
+            },
+            {
+                "name": "auth_token",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
           ],
           "responses": {
             "200": {
@@ -215,7 +272,16 @@
                 "type": "string"
               },
               "description": "ID of the customer"
-            }
+            },
+            {
+                "name": "auth_token",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
           ],
           "responses": {
             "200": {

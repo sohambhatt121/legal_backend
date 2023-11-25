@@ -9,6 +9,7 @@ flask-restful = "*"
 schema = "*"
 pymongo = "*"
 flask-swagger-ui = "*"
+python-dotenv = "*"
 
 [dev-packages]
 

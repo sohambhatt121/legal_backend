@@ -1,0 +1,2 @@
+class NotAdminException(Exception):
+    pass
