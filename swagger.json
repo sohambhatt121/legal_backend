@@ -1,0 +1,239 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Legal Software APIs",
+      "version": "1.0.0"
+    },
+    "tags": [
+        {
+          "name": "Customer",
+          "description": "Customer APIs"
+        }
+    ],
+    "paths": {
+      "/api/v1/customer": {
+        "get": {
+          "summary": "Get all customers",
+          "tags": ["Customer"],
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+            "summary": "Add new customer",
+            "tags": ["Customer"],
+            "requestBody": {
+                "required": true,
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "type": "object",
+                    "properties": {
+                        "customer_code": {
+                        "type": "string"
+                        },
+                        "name": {
+                        "type": "string"
+                        },
+                        "address": {
+                        "type": "string"
+                        },
+                        "contact": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                            "type": "string"
+                            },
+                            "phone": {
+                            "type": "string"
+                            },
+                            "email": {
+                            "type": "string"
+                            }
+                        },
+                        "required": ["name", "phone", "email"]
+                        }
+                    },
+                    "required": ["customer_code", "name", "address", "contact"]
+                    }
+                }
+                }
+            },
+            "responses": {
+                "201": {
+                "description": "customer added successfully"
+                },
+                "400": {
+                "description": "Invalid request data"
+                }
+            }
+        }
+      },
+      "/api/v1/customer/{id}": {
+        "get": {
+          "summary": "Get customer by ID",
+          "tags": ["Customer"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "ID of the customer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "customer not found"
+            }
+          }
+        },
+        "put": {
+          "summary": "Update customer by ID",
+          "tags": ["Customer"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "ID of the customer"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "customer_code": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "contact": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "phone": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "customer updated successfully"
+            },
+            "404": {
+              "description": "customer not found"
+            },
+            "400": {
+              "description": "Invalid request customer"
+            }
+          }
+        },
+        "delete": {
+          "summary": "Delete customer by ID",
+          "tags": ["Customer"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "ID of the customer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "customer deleted successfully"
+            },
+            "404": {
+              "description": "customer not found"
+            }
+          }
+        }
+      },
+      "/api/v1/customer_code/{id}": {
+        "get": {
+          "summary": "Get customer by customer code",
+          "tags": ["Customer"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "ID of the customer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "customer not found"
+            }
+          }
+        }
+      }
+    }
+  }
+  
