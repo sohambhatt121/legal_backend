@@ -8,6 +8,14 @@
         {
           "name": "Customer",
           "description": "Customer APIs"
+        },
+        {
+            "name": "User",
+            "description": "User APIs"
+        },
+        {
+            "name": "Login",
+            "description": "Login APIs"
         }
     ],
     "paths": {
@@ -138,7 +146,7 @@
           ],
           "responses": {
             "200": {
-              "description": "Successful operation",
+              "description": "Successful response - Customer found",
               "content": {
                 "application/json": {
                   "schema": {
@@ -182,27 +190,15 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "customer_code": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "address": {
-                      "type": "string"
-                    },
+                    "customer_code": {"type": "string"},
+                    "name": {"type": "string"},
+                    "address": {"type": "string"},
                     "contact": {
                       "type": "object",
                       "properties": {
-                        "name": {
-                          "type": "string"
-                        },
-                        "phone": {
-                          "type": "string"
-                        },
-                        "email": {
-                          "type": "string"
-                        }
+                        "name": {"type": "string"},
+                        "phone": {"type": "string"},
+                        "email": {"type": "string"}
                       }
                     },
                     "status": {
@@ -222,7 +218,7 @@
               "description": "customer not found"
             },
             "400": {
-              "description": "Invalid request customer"
+              "description": "Invalid request"
             }
           }
         },
@@ -299,6 +295,267 @@
             }
           }
         }
+      },
+      "/api/v1/user": {
+        "get": {
+            "summary": "Get all Users",
+            "tags": ["User"],
+            "parameters": [
+              {
+                  "name": "auth_token",
+                  "in": "header",
+                  "description": "Auth Token",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Successful operation",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+        },
+        "post": {
+          "summary": "Create a new user",
+          "tags": ["User"],
+          "description": "Endpoint to create a new user",
+          "parameters": [
+            {
+                "name": "auth_token",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "customer_code": { "type": "string" },
+                    "first_name": { "type": "string" },
+                    "middle_name": { "type": "string" },
+                    "last_name": { "type": "string" },
+                    "address": { "type": "string" },
+                    "aadhar_card": { "type": "string" },
+                    "phone": { "type": "string" },
+                    "email": { "type": "string" },
+                    "password": { "type": "string" },
+                    "role": { "type": "integer" },
+                    "status": { "type": "integer" }
+                  },
+                  "required": [
+                    "customer_code",
+                    "first_name",
+                    "last_name",
+                    "address",
+                    "aadhar_card",
+                    "phone",
+                    "email",
+                    "password",
+                    "role",
+                    "status"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "User created successfully"
+            },
+            "400": {
+              "description": "Bad request - Validation error"
+            }
+          }
+        }
+      },
+      "/api/v1/user/{id}": {
+        "get": {
+          "summary": "Get user by ID",
+          "description": "Retrieve user information by ID",
+          "tags": ["User"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+                "name": "auth_token",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response - User found"
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        },
+        "put": {
+          "summary": "Update user by ID",
+          "description": "Update user information by ID",
+          "tags": ["User"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+                "name": "auth_token",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "customer_code": { "type": "string" },
+                    "first_name": { "type": "string" },
+                    "middle_name": { "type": "string" },
+                    "last_name": { "type": "string" },
+                    "address": { "type": "string" },
+                    "aadhar_card": { "type": "string" },
+                    "phone": { "type": "string" },
+                    "email": { "type": "string" },
+                    "password": { "type": "string" },
+                    "role": { "type": "integer" },
+                    "status": { "type": "integer" }
+                  }
+                }
+              }
+            },
+            "responses": {
+              "200": {
+                "description": "User updated successfully"
+              },
+              "404": {
+                "description": "User not found"
+              },
+              "400": {
+                "description": "Invalid request"
+              }
+            }
+          }
+        },
+        "delete": {
+          "summary": "Delete user by ID",
+          "description": "Delete user information by ID",
+          "tags": ["User"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+                "name": "auth_token",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "User deleted successfully"
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        }
+      },
+      "/api/v1/login": {
+        "post": {
+            "summary": "User login",
+            "tags": ["Login"],
+            "description": "Endpoint for user login",
+            "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "customer_code": { "type": "string" },
+                      "email": { "type": "string" },
+                      "password": { "type": "string" }
+                    },
+                    "required": [
+                      "customer_code",
+                      "email",
+                      "password"
+                    ]
+                  }
+                }
+              }
+            },
+            "responses": {
+              "200": {
+                "description": "Login successfully"
+              },
+              "400": {
+                "description": "Bad request - Validation error"
+              },
+              "401": {
+                "description": "Invalid credentials"
+              },
+              "404": {
+                "description": "User not found"
+              }
+            }
+          }
       }
     }
   }

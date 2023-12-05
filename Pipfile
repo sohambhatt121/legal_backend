@@ -10,6 +10,8 @@ schema = "*"
 pymongo = "*"
 flask-swagger-ui = "*"
 python-dotenv = "*"
+bcrypt = "*"
+pyjwt = "*"
 
 [dev-packages]
 

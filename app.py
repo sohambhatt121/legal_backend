@@ -1,16 +1,17 @@
 from flask import Flask, jsonify
-from database.db import db
 from flask_restful import Api
-from src.routes import initialize_routes
 from flask_swagger_ui import get_swaggerui_blueprint
-import json
 from dotenv import load_dotenv
 import os
+import json
+
+from src.routes import initialize_routes
 
 app = Flask(__name__)
 api = Api(app)
 load_dotenv()
 
+# Swagger configuration
 SWAGGER_URL = '/swagger'
 API_URL = '/swagger.json'
 
@@ -28,8 +29,10 @@ def swagger():
     with open('swagger.json', 'r') as f:
         return jsonify(json.load(f))
 
+# Routes initialization
 initialize_routes(api)
 
+# Run Application
 if __name__ == '__main__':
     if os.getenv("ENV") == "dev":
         app.run(debug=True)

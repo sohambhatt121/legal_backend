@@ -1,13 +1,13 @@
-from flask import Response, request
-from database.db import db
+from flask import request
 from flask_restful import Resource
-from schema import Schema, And, SchemaError
+from schema import  SchemaError
+from bson import ObjectId
+
+from database.db import db
 from database.customers import customer_schema
-from bson import ObjectId, json_util
-from .authentication import Authentication as Auth
+from util.authentication import Authentication as Auth
 from util.exception import NotAdminException
 from datetime import datetime
-import os
 
 class CustomersApi(Resource):
     def get(self):
@@ -16,6 +16,8 @@ class CustomersApi(Resource):
             customers = list(db.customers.find())
             for item in customers:
                 item['_id'] = str(item['_id'])
+                item['created_at'] = str(item['created_at'])
+                item['updated_at'] = str(item['updated_at'])
             return {'data': customers}, 200
         except NotAdminException as e:
             return {'error': str(e)}, 401
@@ -74,6 +76,8 @@ class CustomerApi(Resource):
             data = db.customers.find_one({'_id': ObjectId(id)})
             if data:
                 data['_id'] = str(data['_id'])
+                data['created_at'] = str(data['created_at'])
+                data['updated_at'] = str(data['updated_at'])
                 return {'data': data}, 200
             else:
                 return {'error': 'Data not found'}, 404
@@ -87,6 +91,8 @@ class CustomerCodeApi(Resource):
             data = db.customers.find_one({'customer_code': id})
             if data:
                 data['_id'] = str(data['_id'])
+                data['created_at'] = str(data['created_at'])
+                data['updated_at'] = str(data['updated_at'])
                 return {'data': data}, 200
             else:
                 return {'error': 'Data not found'}, 404

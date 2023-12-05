@@ -9,5 +9,11 @@ customer_schema = Schema({
         'phone': And(str, lambda s: len(s.strip()) > 0),
         'email': And(str, lambda s: len(s.strip()) > 0)
     },
-    'status': And(int, Or(0,1)),
+    'status': And(int, Or(0,1,2)),
 })
+
+customer_status = {
+    0: "inactive",
+    1: "active",
+    2: "deleted"
+}
