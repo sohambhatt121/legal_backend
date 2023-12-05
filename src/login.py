@@ -15,11 +15,15 @@ class LoginApi(Resource):
             customer_code = data.get('customer_code')
             email = data.get('email')
             password = data.get('password')
-            #print(customer_code)
-            #print(email)
+            
             Validation.validate_active_customer(customer_code)
             user = db.users.find_one({'customer_code': customer_code, 'email': email})
-            #print(str(user['_id']))
+
+            existing_token = db.auth_token.find_one({"user_id": str(user['_id'])})
+            if existing_token:
+                token = existing_token['token']
+                return {"message": "Login successful", "token": token}, 200
+            
             if Auth.authenticate_user(user, password):
                 token = Auth.generate_auth_token(user['_id'])
                 return {"message": "Login successful", "token": token}, 200
@@ -36,3 +40,10 @@ class LoginApi(Resource):
             return {'error': str(e)}, 404
         except UserInactive as e:
             return {'error': str(e)}, 401
+        
+    def get(self):
+        token = request.headers.get('auth_token')
+        if Auth.user_logout(token):
+            return {"message": "Logout successful"}, 200
+        else:
+            return {'error': 'Invalid request'}, 400

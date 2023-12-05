@@ -555,6 +555,30 @@
                 "description": "User not found"
               }
             }
+          },
+          "get": {
+            "summary": "User Logout",
+            "tags": ["Login"],
+            "description": "Endpoint for user logout",
+            "parameters": [
+                {
+                    "name": "auth_token",
+                    "in": "header",
+                    "description": "Auth Token",
+                    "required": true,
+                    "schema": {
+                      "type": "string"
+                    }
+                }
+              ],
+            "responses": {
+              "200": {
+                "description": "Logout successfully"
+              },
+              "400": {
+                "description": "Bad request - Validation error"
+              }
+            }
           }
       }
     }

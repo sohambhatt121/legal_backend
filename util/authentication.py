@@ -4,6 +4,7 @@ from util.exception import NotAdminException, UserInactive, UserNotExist
 from database.db import db
 import jwt
 from datetime import datetime, timedelta
+from bson import ObjectId
 
 
 class Authentication():
@@ -48,6 +49,16 @@ class Authentication():
         body['exp_time'] = datetime.utcnow() + timedelta(hours=24)
         db.auth_token.insert_one(body)
         return token
+    
+    def user_logout(token):
+        decoded_token = jwt.decode(token, os.getenv("SECRET_KEY"), algorithms=['HS256'])
+        user_id = decoded_token.get('user_id')
+        print(user_id)
+        result = db.auth_token.delete_many({"user_id": str(user_id)})
+        print(result.deleted_count)
+        if result.deleted_count > 0:
+            return True
+        return False
 
 
 
