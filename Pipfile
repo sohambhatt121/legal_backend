@@ -12,8 +12,9 @@ flask-swagger-ui = "*"
 python-dotenv = "*"
 bcrypt = "*"
 pyjwt = "*"
+pipreqs = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.7"
+python_version = "3.9"

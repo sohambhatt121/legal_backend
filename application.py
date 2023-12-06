@@ -7,8 +7,8 @@ import json
 
 from src.routes import initialize_routes
 
-app = Flask(__name__)
-api = Api(app)
+application = Flask(__name__)
+api = Api(application)
 load_dotenv()
 
 # Swagger configuration
@@ -23,8 +23,12 @@ swaggerui_blueprint = get_swaggerui_blueprint(
     }
 )
 
-app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
-@app.route('/swagger.json')
+@application.route('/')
+def home():
+    return "Welcome to Legal software apis"
+
+application.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
+@application.route('/swagger.json')
 def swagger():
     with open('swagger.json', 'r') as f:
         return jsonify(json.load(f))
@@ -35,9 +39,9 @@ initialize_routes(api)
 # Run Application
 if __name__ == '__main__':
     if os.getenv("ENV") == "dev":
-        app.run(debug=True)
+        application.run(debug=True)
     else:
-        app.run()
+        application.run()
 
 
 
