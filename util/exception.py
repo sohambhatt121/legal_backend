@@ -15,3 +15,20 @@ class UserInactive(Exception):
 
 class InvalidPassword(Exception):
     pass
+
+class AuthTokenExpired(Exception):
+    pass
+
+class InvaliAuthToken(Exception):
+    pass
+
+class UserNotExist(Exception):
+    pass
+
+class UserInactive(Exception):
+    pass
+
+class UnauthorizedUser(Exception):
+    pass
+
+

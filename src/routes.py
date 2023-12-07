@@ -1,6 +1,7 @@
 from .customers import CustomersApi, CustomerApi, CustomerCodeApi
 from .users import UserApi, UsersApi
 from .login import LoginApi
+from .clients import ClientApi, ClientsApi
 
 def initialize_routes(api):
 
@@ -15,3 +16,7 @@ def initialize_routes(api):
 
     #login model
     api.add_resource(LoginApi, '/api/v1/login')
+
+    #client model
+    api.add_resource(ClientApi, '/api/v1/client')
+    api.add_resource(ClientsApi, '/api/v1/client/<id>')

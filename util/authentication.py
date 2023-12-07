@@ -1,7 +1,8 @@
 import os
 import bcrypt
-from util.exception import NotAdminException, UserInactive, UserNotExist
+from util.exception import NotAdminException, UserInactive, UserNotExist, AuthTokenExpired, InvaliAuthToken
 from database.db import db
+from util.validation import Validation
 import jwt
 from datetime import datetime, timedelta
 from bson import ObjectId
@@ -18,7 +19,19 @@ class Authentication():
         if token == os.getenv("ADMIN_KEY"):
             return True
         
-        user = db.auth_token.find_one({'token': token})
+        token_details = db.auth_token.find_one({'token': token})
+        if token_details:
+            decoded_token = jwt.decode(token, os.getenv("SECRET_KEY"), algorithms=['HS256'])
+            user_id = decoded_token.get('user_id')
+            token_exp = decoded_token.get('exp')
+            current_time = datetime.utcnow()
+            Validation.validate_active_user(user_id)
+            if current_time < datetime.utcfromtimestamp(token_exp):
+                return user_id
+            else:
+                raise AuthTokenExpired("Token has expired")
+        else:
+            raise InvaliAuthToken("Invalid Auth Token")
 
     def hash_password(password):
         salt = bcrypt.gensalt()

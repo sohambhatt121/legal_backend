@@ -16,6 +16,10 @@
         {
             "name": "Login",
             "description": "Login APIs"
+        },
+        {
+            "name": "Client",
+            "description": "Client APIs"
         }
     ],
     "paths": {
@@ -580,6 +584,258 @@
               }
             }
           }
+      },
+      "/api/v1/client": {
+        "get": {
+            "summary": "Get all Clients",
+            "tags": ["Client"],
+            "parameters": [
+              {
+                  "name": "auth_token",
+                  "in": "header",
+                  "description": "Auth Token",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+              },
+              {
+                "name": "customer_code",
+                "in": "query",
+                "description": "Customer Code",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Successful operation",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+        },
+        "post": {
+          "summary": "Create a new client",
+          "tags": ["Client"],
+          "description": "Endpoint to create a new client",
+          "parameters": [
+            {
+                "name": "auth_token",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+
+                  "properties": {
+                    "customer_code": { "type": "string" },
+                    "name": { "type": "string" },
+                    "address": { "type": "string" },
+                    "contact_person": {
+                        "type": "object",
+                        "properties": {
+                            "aadhar_card": { "type": "string" },
+                            "phone": { "type": "string" },
+                            "email": { "type": "string" },
+                            "name": { "type": "string" }
+                        },
+                        "required" : ["name","phone","email"]
+                    },
+                    "client_type": { "type": "integer" },
+                    "status": { "type": "integer" }
+                  },
+                  "required": [
+                    "customer_code",
+                    "name",
+                    "contact_person",
+                    "client_type",
+                    "status"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Client created successfully"
+            },
+            "400": {
+              "description": "Bad request - Validation error"
+            },
+            "401": {
+                "description": "Unauthorized"
+              }
+          }
+        }
+      },
+      "/api/v1/client/{id}": {
+        "get": {
+          "summary": "Get client by ID",
+          "description": "Retrieve client information by ID",
+          "tags": ["Client"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+                "name": "auth_token",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response - Client found"
+            },
+            "404": {
+              "description": "User not found"
+            },
+            "401": {
+                "description": "Unauthorized"
+            }
+          }
+        },
+        "put": {
+          "summary": "Update client by ID",
+          "description": "Update client information by ID",
+          "tags": ["Client"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+                "name": "auth_token",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "customer_code": { "type": "string" },
+                    "name": { "type": "string" },
+                    "address": { "type": "string" },
+                    "contact_person": {
+                        "type": "object",
+                        "properties": {
+                            "aadhar_card": { "type": "string" },
+                            "phone": { "type": "string" },
+                            "email": { "type": "string" },
+                            "name": { "type": "string" }
+                        },
+                        "required" : ["name","phone","email"]
+                    },
+                    "client_type": { "type": "integer" },
+                    "status": { "type": "integer" }
+                  },
+                  "required": [
+                    "customer_code",
+                    "name",
+                    "contact_person",
+                    "client_type",
+                    "status"
+                  ]
+                }
+              }
+            },
+            "responses": {
+              "200": {
+                "description": "User updated successfully"
+              },
+              "404": {
+                "description": "User not found"
+              },
+              "400": {
+                "description": "Invalid request"
+              },
+              "401": {
+                "description": "Unauthorized"
+              }
+            }
+          }
+        },
+        "delete": {
+          "summary": "Delete client by ID",
+          "description": "Delete client information by ID",
+          "tags": ["Client"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+                "name": "auth_token",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Client deleted successfully"
+            },
+            "404": {
+              "description": "Client not found"
+            },
+            "401": {
+                "description": "Unauthorized"
+              }
+          }
+        }
       }
     }
   }

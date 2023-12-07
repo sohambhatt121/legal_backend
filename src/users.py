@@ -7,13 +7,12 @@ from database.db import db
 from database.users import user_schema
 from util.authentication import Authentication as Auth
 from util.exception import NotAdminException, InvalidCustomerCode, CustomerInactive
-from datetime import datetime
 from util.validation import Validation
 
 class UsersApi(Resource):
     def get(self):
         try: 
-            #Auth.check_admin_access(request.headers.get('auth_token'))
+            Auth.check_admin_access(request.headers.get('auth_token'))
             users = list(db.users.find())
             for item in users:
                 item['_id'] = str(item['_id'])
@@ -25,7 +24,7 @@ class UsersApi(Resource):
 
     def post(self):
         try:
-            #Auth.check_admin_access(request.headers.get('auth_token'))
+            Auth.check_admin_access(request.headers.get('auth_token'))
             body = request.get_json()
             user_schema.validate(body)
             Validation.validate_active_customer(body['customer_code'])
@@ -46,7 +45,7 @@ class UsersApi(Resource):
 class UserApi(Resource):
     def put(self, id):
         try:
-            #Auth.check_admin_access(request.headers.get('auth_token'))
+            Auth.check_admin_access(request.headers.get('auth_token'))
             body = request.get_json()
             user_schema.validate(body)
             Validation.validate_active_customer(body['customer_code'])
@@ -72,7 +71,7 @@ class UserApi(Resource):
     
     def delete(self, id):
         try:
-            #Auth.check_admin_access(request.headers.get('auth_token'))
+            Auth.check_admin_access(request.headers.get('auth_token'))
             result = db.users.delete_one({'_id': ObjectId(id)})
             if result.deleted_count == 1:
                 return {'message': 'User deleted successfully'}, 200
@@ -83,7 +82,7 @@ class UserApi(Resource):
 
     def get(self, id):
         try:
-            #Auth.check_admin_access(request.headers.get('auth_token'))
+            Auth.check_admin_access(request.headers.get('auth_token'))
             data = db.users.find_one({'_id': ObjectId(id)})
             if data:
                 data['_id'] = str(data['_id'])

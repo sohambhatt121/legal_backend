@@ -18,11 +18,7 @@ class LoginApi(Resource):
             
             Validation.validate_active_customer(customer_code)
             user = db.users.find_one({'customer_code': customer_code, 'email': email})
-
-            existing_token = db.auth_token.find_one({"user_id": str(user['_id'])})
-            if existing_token:
-                token = existing_token['token']
-                return {"message": "Login successful", "token": token}, 200
+            db.auth_token.delete_many({"user_id": str(user['_id'])})
             
             if Auth.authenticate_user(user, password):
                 token = Auth.generate_auth_token(user['_id'])
