@@ -10,10 +10,11 @@ from bson import ObjectId
 
 class Authentication():
     def check_admin_access(token):
+        temp = os.getenv("ADMIN_KEY")
         if token == os.getenv("ADMIN_KEY"):
             return True
         else:
-            raise NotAdminException("User is not an admin")
+            raise NotAdminException("User is not an admin " + str(temp) + str(token))
         
     def validate_token(token):
         if token == os.getenv("ADMIN_KEY"):

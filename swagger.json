@@ -29,7 +29,7 @@
           "tags": ["Customer"],
           "parameters": [
             {
-                "name": "auth_token",
+                "name": "Authorization",
                 "in": "header",
                 "description": "Auth Token",
                 "required": true,
@@ -64,7 +64,7 @@
             "tags": ["Customer"],
             "parameters": [
                 {
-                    "name": "auth_token",
+                    "name": "Authorization",
                     "in": "header",
                     "description": "Auth Token",
                     "required": true,
@@ -139,7 +139,7 @@
               "description": "ID of the customer"
             },
             {
-                "name": "auth_token",
+                "name": "Authorization",
                 "in": "header",
                 "description": "Auth Token",
                 "required": true,
@@ -178,7 +178,7 @@
               "description": "ID of the customer"
             },
             {
-                "name": "auth_token",
+                "name": "Authorization",
                 "in": "header",
                 "description": "Auth Token",
                 "required": true,
@@ -240,7 +240,7 @@
               "description": "ID of the customer"
             },
             {
-                "name": "auth_token",
+                "name": "Authorization",
                 "in": "header",
                 "description": "Auth Token",
                 "required": true,

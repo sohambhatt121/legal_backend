@@ -12,7 +12,7 @@ from datetime import datetime
 class CustomersApi(Resource):
     def get(self):
         try: 
-            Auth.check_admin_access(request.headers.get('auth_token'))
+            Auth.check_admin_access(request.headers.get('Authorization'))
             customers = list(db.customers.find())
             for item in customers:
                 item['_id'] = str(item['_id'])
@@ -24,7 +24,7 @@ class CustomersApi(Resource):
 
     def post(self):
         try:
-            Auth.check_admin_access(request.headers.get('auth_token'))
+            Auth.check_admin_access(request.headers.get('Authorization'))
             body = request.get_json()
             customer_schema.validate(body)
             body['created_at'] = datetime.now()
@@ -40,7 +40,7 @@ class CustomersApi(Resource):
 class CustomerApi(Resource):
     def put(self, id):
         try:
-            Auth.check_admin_access(request.headers.get('auth_token'))
+            Auth.check_admin_access(request.headers.get('Authorization'))
             body = request.get_json()
             customer_schema.validate(body)
             body['updated_at'] = datetime.now()
@@ -61,7 +61,7 @@ class CustomerApi(Resource):
     
     def delete(self, id):
         try:
-            Auth.check_admin_access(request.headers.get('auth_token'))
+            Auth.check_admin_access(request.headers.get('Authorization'))
             result = db.customers.delete_one({'_id': ObjectId(id)})
             if result.deleted_count == 1:
                 return {'message': 'Data deleted successfully'}, 200
@@ -72,7 +72,7 @@ class CustomerApi(Resource):
 
     def get(self, id):
         try:
-            Auth.check_admin_access(request.headers.get('auth_token'))
+            Auth.check_admin_access(request.headers.get('Authorization'))
             data = db.customers.find_one({'_id': ObjectId(id)})
             if data:
                 data['_id'] = str(data['_id'])
@@ -87,7 +87,7 @@ class CustomerApi(Resource):
 class CustomerCodeApi(Resource):
     def get(self, id):
         try:
-            Auth.check_admin_access(request.headers.get('auth_token'))
+            Auth.check_admin_access(request.headers.get('Authorization'))
             data = db.customers.find_one({'customer_code': id})
             if data:
                 data['_id'] = str(data['_id'])
