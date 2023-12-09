@@ -39,10 +39,10 @@
             {
                 "name": "status",
                 "in": "query",
-                "description": "Status (0: inactive, 1: active (default), 2: deleted)",
+                "description": "Status (0: inactive, 1: active (default), 2: deleted, 3: active+inactive, 4: all)",
                 "required": false,
                 "schema": {
-                    "type": "string"
+                    "type": "integer"
                 }
             }
           ],

@@ -13,7 +13,7 @@ class CustomersApi(Resource):
     def get(self):
         try: 
             Auth.check_admin_access(request.headers.get('authToken'))
-            query = Helper.get_query_params(request.args)
+            query = Helper.get_query_params(Helper, request.args)
             customers = list(db.customers.find(query))
             for item in customers:
                 item['_id'] = str(item['_id'])
@@ -100,10 +100,19 @@ class CustomerCodeApi(Resource):
             return {'error': str(e)}, 401
         
 class Helper():
-    def get_query_params(args):
+    def get_query_params(self, args):
         query = {}
-        status = args.get('status')
-        if status is None:
-            query['status'] = 1
-        
+        query['status'] = self.get_status(self, args.get('status'))
         return query
+    
+    def get_status(self, status):
+        if status is None:
+            result = 1
+        elif status == '3':
+            result = {"$in":[0,1]}
+        elif status == '4':
+            result = {"$in":[0,1,2]}
+        else:
+            result = int(status) 
+
+        return result

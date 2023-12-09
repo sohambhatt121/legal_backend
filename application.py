@@ -19,7 +19,8 @@ swaggerui_blueprint = get_swaggerui_blueprint(
     SWAGGER_URL,
     API_URL,
     config={
-        'app_name': "Legal Software APIs"
+        'app_name': "Legal Software APIs",
+        'docExpansion': 'none'
     }
 )
 
