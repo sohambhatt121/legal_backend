@@ -13,7 +13,8 @@ class CustomersApi(Resource):
     def get(self):
         try: 
             Auth.check_admin_access(request.headers.get('authToken'))
-            customers = list(db.customers.find())
+            query = Helper.get_query_params(request.args)
+            customers = list(db.customers.find(query))
             for item in customers:
                 item['_id'] = str(item['_id'])
                 item['created_at'] = str(item['created_at'])
@@ -35,7 +36,6 @@ class CustomersApi(Resource):
             return {'error': 'Invalid request data', 'details': str(e)}, 400
         except NotAdminException as e:
             return {'error': str(e)}, 401
-        
         
 class CustomerApi(Resource):
     def put(self, id):
@@ -99,3 +99,11 @@ class CustomerCodeApi(Resource):
         except NotAdminException as e:
             return {'error': str(e)}, 401
         
+class Helper():
+    def get_query_params(args):
+        query = {}
+        status = args.get('status')
+        if status is None:
+            query['status'] = 1
+        
+        return query

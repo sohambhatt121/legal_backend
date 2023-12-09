@@ -35,6 +35,15 @@
                 "required": true,
                 "type": "string",
                 "format": "string"
+            },
+            {
+                "name": "status",
+                "in": "query",
+                "description": "Status (0: inactive, 1: active (default), 2: deleted)",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
             }
           ],
           "responses": {
