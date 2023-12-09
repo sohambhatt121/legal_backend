@@ -29,13 +29,12 @@
           "tags": ["Customer"],
           "parameters": [
             {
-                "name": "Authorization",
+                "name": "authToken",
                 "in": "header",
-                "description": "Auth Token",
+                "description": "authToken",
                 "required": true,
-                "schema": {
-                  "type": "string"
-                }
+                "type": "string",
+                "format": "string"
             }
           ],
           "responses": {
@@ -64,7 +63,7 @@
             "tags": ["Customer"],
             "parameters": [
                 {
-                    "name": "Authorization",
+                    "name": "authToken",
                     "in": "header",
                     "description": "Auth Token",
                     "required": true,
@@ -139,7 +138,7 @@
               "description": "ID of the customer"
             },
             {
-                "name": "Authorization",
+                "name": "authToken",
                 "in": "header",
                 "description": "Auth Token",
                 "required": true,
@@ -178,7 +177,7 @@
               "description": "ID of the customer"
             },
             {
-                "name": "Authorization",
+                "name": "authToken",
                 "in": "header",
                 "description": "Auth Token",
                 "required": true,
@@ -240,7 +239,7 @@
               "description": "ID of the customer"
             },
             {
-                "name": "Authorization",
+                "name": "authToken",
                 "in": "header",
                 "description": "Auth Token",
                 "required": true,
@@ -274,7 +273,7 @@
               "description": "ID of the customer"
             },
             {
-                "name": "auth_token",
+                "name": "authToken",
                 "in": "header",
                 "description": "Auth Token",
                 "required": true,
@@ -306,7 +305,7 @@
             "tags": ["User"],
             "parameters": [
               {
-                  "name": "auth_token",
+                  "name": "authToken",
                   "in": "header",
                   "description": "Auth Token",
                   "required": true,
@@ -342,7 +341,7 @@
           "description": "Endpoint to create a new user",
           "parameters": [
             {
-                "name": "auth_token",
+                "name": "authToken",
                 "in": "header",
                 "description": "Auth Token",
                 "required": true,
@@ -411,7 +410,7 @@
               }
             },
             {
-                "name": "auth_token",
+                "name": "authToken",
                 "in": "header",
                 "description": "Auth Token",
                 "required": true,
@@ -443,7 +442,7 @@
               }
             },
             {
-                "name": "auth_token",
+                "name": "authToken",
                 "in": "header",
                 "description": "Auth Token",
                 "required": true,
@@ -501,7 +500,7 @@
               }
             },
             {
-                "name": "auth_token",
+                "name": "authToken",
                 "in": "header",
                 "description": "Auth Token",
                 "required": true,
@@ -566,7 +565,7 @@
             "description": "Endpoint for user logout",
             "parameters": [
                 {
-                    "name": "auth_token",
+                    "name": "authToken",
                     "in": "header",
                     "description": "Auth Token",
                     "required": true,
@@ -591,7 +590,7 @@
             "tags": ["Client"],
             "parameters": [
               {
-                  "name": "auth_token",
+                  "name": "authToken",
                   "in": "header",
                   "description": "Auth Token",
                   "required": true,
@@ -602,7 +601,7 @@
               {
                 "name": "customer_code",
                 "in": "query",
-                "description": "Customer Code",
+                "description": "Customer code",
                 "required": true,
                 "schema": {
                     "type": "string"
@@ -636,7 +635,7 @@
           "description": "Endpoint to create a new client",
           "parameters": [
             {
-                "name": "auth_token",
+                "name": "authToken",
                 "in": "header",
                 "description": "Auth Token",
                 "required": true,
@@ -708,7 +707,7 @@
               }
             },
             {
-                "name": "auth_token",
+                "name": "authToken",
                 "in": "header",
                 "description": "Auth Token",
                 "required": true,
@@ -743,7 +742,7 @@
               }
             },
             {
-                "name": "auth_token",
+                "name": "authToken",
                 "in": "header",
                 "description": "Auth Token",
                 "required": true,
@@ -815,7 +814,7 @@
               }
             },
             {
-                "name": "auth_token",
+                "name": "authToken",
                 "in": "header",
                 "description": "Auth Token",
                 "required": true,

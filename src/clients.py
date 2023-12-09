@@ -14,7 +14,7 @@ from util.validation import Validation
 class ClientApi(Resource):
     def get(self):
         try: 
-            user_id = Auth.validate_token(request.headers.get('auth_token'))
+            user_id = Auth.validate_token(request.headers.get('authToken'))
             customer_code = request.args.get('customer_code')
             user_customer_code = Validation.get_customer_by_user(user_id)
             if customer_code != user_customer_code:
@@ -37,7 +37,7 @@ class ClientApi(Resource):
 
     def post(self):
         try:
-            user_id = Auth.validate_token(request.headers.get('auth_token'))
+            user_id = Auth.validate_token(request.headers.get('authToken'))
             body = request.get_json()
             client_schema.validate(body)
             Validation.validate_active_customer(body['customer_code'])
@@ -67,7 +67,7 @@ class ClientApi(Resource):
 class ClientsApi(Resource):
     def put(self, id):
         try:
-            user_id = Auth.validate_token(request.headers.get('auth_token'))
+            user_id = Auth.validate_token(request.headers.get('authToken'))
             body = request.get_json()
             client_schema.validate(body)
             data = db.clients.find_one({'_id': ObjectId(id)})
@@ -99,7 +99,7 @@ class ClientsApi(Resource):
     
     def delete(self, id):
         try:
-            user_id = Auth.validate_token(request.headers.get('auth_token'))
+            user_id = Auth.validate_token(request.headers.get('authToken'))
             data = db.clients.find_one({'_id': ObjectId(id)})
             Validation.validate_user_customer_relation(user_id, data['customer_code'])
             
@@ -119,7 +119,7 @@ class ClientsApi(Resource):
 
     def get(self, id):
         try:
-            user_id = Auth.validate_token(request.headers.get('auth_token'))
+            user_id = Auth.validate_token(request.headers.get('authToken'))
             data = db.clients.find_one({'_id': ObjectId(id)})
             Validation.validate_user_customer_relation(user_id, data['customer_code'])
             

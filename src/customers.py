@@ -12,7 +12,7 @@ from datetime import datetime
 class CustomersApi(Resource):
     def get(self):
         try: 
-            Auth.check_admin_access(request.headers.get('Authorization'))
+            Auth.check_admin_access(request.headers.get('authToken'))
             customers = list(db.customers.find())
             for item in customers:
                 item['_id'] = str(item['_id'])

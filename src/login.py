@@ -18,10 +18,10 @@ class LoginApi(Resource):
             
             Validation.validate_active_customer(customer_code)
             user = db.users.find_one({'customer_code': customer_code, 'email': email})
-            db.auth_token.delete_many({"user_id": str(user['_id'])})
+            db.authToken.delete_many({"user_id": str(user['_id'])})
             
             if Auth.authenticate_user(user, password):
-                token = Auth.generate_auth_token(user['_id'])
+                token = Auth.generate_authToken(user['_id'])
                 return {"message": "Login successful", "token": token}, 200
             else:
                 return {"message": "Invalid Password"}, 401
@@ -38,7 +38,7 @@ class LoginApi(Resource):
             return {'error': str(e)}, 401
         
     def get(self):
-        token = request.headers.get('auth_token')
+        token = request.headers.get('authToken')
         if Auth.user_logout(token):
             return {"message": "Logout successful"}, 200
         else:
