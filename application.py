@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from flask_restful import Api
 from flask_swagger_ui import get_swaggerui_blueprint
 from dotenv import load_dotenv
+load_dotenv()
 import os
 import json
 
@@ -9,7 +10,6 @@ from src.routes import initialize_routes
 
 application = Flask(__name__)
 api = Api(application)
-load_dotenv()
 
 # Swagger configuration
 SWAGGER_URL = '/swagger'
