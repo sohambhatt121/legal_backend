@@ -19,6 +19,7 @@ class UsersApi(Resource):
                 item['_id'] = str(item['_id'])
                 item['created_at'] = str(item['created_at'])
                 item['updated_at'] = str(item['updated_at'])
+                del item['password']
             return {'data': users}, 200
         except NotAdminException as e:
             return {'error': str(e)}, 401

@@ -481,17 +481,17 @@
                   }
                 }
               }
+            }
+        },
+        "responses": {
+            "200": {
+            "description": "User updated successfully"
             },
-            "responses": {
-              "200": {
-                "description": "User updated successfully"
-              },
-              "404": {
-                "description": "User not found"
-              },
-              "400": {
-                "description": "Invalid request"
-              }
+            "404": {
+            "description": "User not found"
+            },
+            "400": {
+            "description": "Invalid request"
             }
           }
         },
@@ -568,7 +568,7 @@
               }
             }
           },
-          "get": {
+          "delete": {
             "summary": "User Logout",
             "tags": ["Login"],
             "description": "Endpoint for user logout",
@@ -792,20 +792,20 @@
                   ]
                 }
               }
+            }
+        },
+        "responses": {
+            "200": {
+            "description": "User updated successfully"
             },
-            "responses": {
-              "200": {
-                "description": "User updated successfully"
-              },
-              "404": {
-                "description": "User not found"
-              },
-              "400": {
-                "description": "Invalid request"
-              },
-              "401": {
-                "description": "Unauthorized"
-              }
+            "404": {
+            "description": "User not found"
+            },
+            "400": {
+            "description": "Invalid request"
+            },
+            "401": {
+            "description": "Unauthorized"
             }
           }
         },
@@ -844,6 +844,120 @@
               }
           }
         }
+      },
+      "/api/v1/change_password/{id}": {
+        "put": {
+          "summary": "Change Password",
+          "description": "Change Password",
+          "tags": ["Login"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+                "name": "authToken",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "password": { "type": "string" }
+                  }
+                }
+              }
+            }
+        },
+        "responses": {
+            "200": {
+            "description": "Password updated successfully"
+            },
+            "404": {
+            "description": "User not found"
+            },
+            "400": {
+            "description": "Invalid request"
+            },
+            "401": {
+            "description": "Token has expired"
+            }
+        }
+        }
+      },
+      "/api/v1/forgot_password/{email}": {
+        "get": {
+            "summary": "Generate Forgot Password Key",
+            "description": "Generate Forgot Password Key",
+            "tags": ["Login"],
+            "parameters": [
+              {
+                "name": "email",
+                "in": "path",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Forgot Password Key Generated"
+              },
+              "404": {
+                "description": "User not found"
+              }
+            }
+          }
+      },
+      "/api/v1/reset_password": {
+        "post": {
+            "summary": "Reset Password",
+            "tags": ["Login"],
+            "description": "Reset Password",
+            "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "key": { "type": "string" },
+                      "password": { "type": "string" }
+                    },
+                    "required": [
+                      "key",
+                      "password"
+                    ]
+                  }
+                }
+              }
+            },
+            "responses": {
+              "200": {
+                "description": "Password updated successfully"
+              },
+              "400": {
+                "description": "Error in updating password"
+              },
+              "404": {
+                "description": "User not found"
+              }
+            }
+          }
       }
     }
   }

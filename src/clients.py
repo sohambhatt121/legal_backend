@@ -10,13 +10,14 @@ from util.exception import NotAdminException, InvalidCustomerCode, CustomerInact
 from util.exception import UserNotExist, UserInactive, InvaliAuthToken, UnauthorizedUser
 from datetime import datetime
 from util.validation import Validation
+from util.common import Common
 
 class ClientApi(Resource):
     def get(self):
         try: 
             user_id = Auth.validate_token(request.headers.get('authToken'))
             customer_code = request.args.get('customer_code')
-            user_customer_code = Validation.get_customer_by_user(user_id)
+            user_customer_code = Common.get_customer_by_user(Common, user_id)
             if customer_code != user_customer_code:
                 raise UnauthorizedUser("User is UnAthorized")
             

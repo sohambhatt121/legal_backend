@@ -35,10 +35,3 @@ class Validation():
                 return True
         else:
             raise UserNotExist("User not exist")
-        
-    def get_customer_by_user(user_id):
-        user = db.users.find_one({"_id": ObjectId(user_id)})
-        if user:
-            return user['customer_code']
-        else:
-            raise UserNotExist("User not exist")

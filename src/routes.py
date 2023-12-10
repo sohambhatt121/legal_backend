@@ -1,6 +1,6 @@
 from .customers import CustomersApi, CustomerApi, CustomerCodeApi
 from .users import UserApi, UsersApi
-from .login import LoginApi
+from .login import LoginApi, ForgotPasswordApi, ResetPasswordApi, ChangePasswordApi
 from .clients import ClientApi, ClientsApi
 
 def initialize_routes(api):
@@ -16,6 +16,10 @@ def initialize_routes(api):
 
     #login model
     api.add_resource(LoginApi, '/api/v1/login')
+    api.add_resource(ForgotPasswordApi, '/api/v1/forgot_password/<email>')
+    api.add_resource(ResetPasswordApi, '/api/v1/reset_password')
+    api.add_resource(ChangePasswordApi, '/api/v1/change_password/<id>')
+
 
     #client model
     api.add_resource(ClientApi, '/api/v1/client')
