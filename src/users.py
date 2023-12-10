@@ -4,7 +4,7 @@ from schema import  SchemaError
 from bson import ObjectId
 
 from database.db import db
-from database.users import user_schema
+from database.users import user_schema, update_user_schema
 from util.authentication import Authentication as Auth
 from util.exception import NotAdminException, InvalidCustomerCode, CustomerInactive
 from util.validation import Validation
@@ -13,7 +13,7 @@ from datetime import datetime
 class UsersApi(Resource):
     def get(self):
         try: 
-            Auth.check_admin_access(request.headers.get('authToken'))
+            Auth.check_admin_access(Auth, request.headers.get('authToken'))
             users = list(db.users.find())
             for item in users:
                 item['_id'] = str(item['_id'])
@@ -26,11 +26,11 @@ class UsersApi(Resource):
 
     def post(self):
         try:
-            Auth.check_admin_access(request.headers.get('authToken'))
+            Auth.check_admin_access(Auth, request.headers.get('authToken'))
             body = request.get_json()
             user_schema.validate(body)
-            Validation.validate_active_customer(body['customer_code'])
-            body['password'] = Auth.hash_password(body['password'])
+            Validation.validate_active_customer(Validation, body['customer_code'])
+            body['password'] = Auth.hash_password(Auth, body['password'])
             body['created_at'] = datetime.now()
             body['updated_at'] = datetime.now()
             user =  db.users.insert_one(body)
@@ -47,13 +47,14 @@ class UsersApi(Resource):
 class UserApi(Resource):
     def put(self, id):
         try:
-            Auth.check_admin_access(request.headers.get('authToken'))
+            Auth.check_admin_access(Auth, request.headers.get('authToken'))
             body = request.get_json()
-            user_schema.validate(body)
-            Validation.validate_active_customer(body['customer_code'])
+            update_user_schema.validate(body)
+            Validation.validate_active_customer(Validation, body['customer_code'])
             body['updated_at'] = datetime.now()
             if '_id' in body:
                 del body['_id']
+                del body['password']
             
             result = db.users.update_one({'_id': ObjectId(id)}, {'$set': body})
             
@@ -73,7 +74,7 @@ class UserApi(Resource):
     
     def delete(self, id):
         try:
-            Auth.check_admin_access(request.headers.get('authToken'))
+            Auth.check_admin_access(Auth, request.headers.get('authToken'))
             result = db.users.delete_one({'_id': ObjectId(id)})
             if result.deleted_count == 1:
                 return {'message': 'User deleted successfully'}, 200
@@ -84,12 +85,13 @@ class UserApi(Resource):
 
     def get(self, id):
         try:
-            Auth.check_admin_access(request.headers.get('authToken'))
+            Auth.check_admin_access(Auth, request.headers.get('authToken'))
             data = db.users.find_one({'_id': ObjectId(id)})
             if data:
                 data['_id'] = str(data['_id'])
                 data['created_at'] = str(data['created_at'])
                 data['updated_at'] = str(data['updated_at'])
+                del data['password']
                 return {'data': data}, 200
             else:
                 return {'error': 'User not found'}, 404

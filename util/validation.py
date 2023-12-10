@@ -3,8 +3,7 @@ from database.db import db
 from bson import ObjectId
 
 class Validation():
-    
-    def validate_active_customer(customer_code):
+    def validate_active_customer(self, customer_code):
         customer = db.customers.find_one({'customer_code': customer_code})
         if customer:
             if customer['status'] == 1:
@@ -14,7 +13,7 @@ class Validation():
         else:
             raise InvalidCustomerCode("Invalid Customer Code")
         
-    def validate_active_user(user_id):
+    def validate_active_user(self, user_id):
         user = db.users.find_one({'_id': ObjectId(user_id)})
         if user:
             if user['status'] == 1:
@@ -24,7 +23,7 @@ class Validation():
         else:
             raise UserNotExist("Invalid Customer Code")
         
-    def validate_user_customer_relation(user_id, customer_code):
+    def validate_user_customer_relation(self, user_id, customer_code):
         user = db.users.find_one({"_id": ObjectId(user_id)})
         if user:
             if user['status'] != 1:

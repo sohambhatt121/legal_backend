@@ -9,14 +9,14 @@ from bson import ObjectId
 
 
 class Authentication():
-    def check_admin_access(token):
+    def check_admin_access(self, token):
         temp = os.getenv("ADMIN_KEY")
         if token == os.getenv("ADMIN_KEY"):
             return True
         else:
             raise NotAdminException("User is not an admin " + str(temp) + str(token))
         
-    def validate_token(token):
+    def validate_token(self, token):
         if token == os.getenv("ADMIN_KEY"):
             return True
         
@@ -26,7 +26,7 @@ class Authentication():
             user_id = decoded_token.get('user_id')
             token_exp = decoded_token.get('exp')
             current_time = datetime.utcnow()
-            Validation.validate_active_user(user_id)
+            Validation.validate_active_user(Validation, user_id)
             if current_time < datetime.utcfromtimestamp(token_exp):
                 return user_id
             else:
@@ -34,15 +34,15 @@ class Authentication():
         else:
             raise InvaliAuthToken("Invalid Auth Token")
 
-    def hash_password(password):
+    def hash_password(self, password):
         salt = bcrypt.gensalt()
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
         return hashed_password
     
-    def verify_password(password, hashed_password):
+    def verify_password(self, password, hashed_password):
         return bcrypt.checkpw(password.encode('utf-8'), hashed_password)
     
-    def authenticate_user(user, password):
+    def authenticate_user(self, user, password):
         if user:
             if user['status'] != 1:
                 raise UserInactive("User is not active")
@@ -51,7 +51,7 @@ class Authentication():
         else:
             raise UserNotExist("User Not Exist")
         
-    def generate_auth_token(user_id):
+    def generate_auth_token(self, user_id):
         token = jwt.encode({
                     'user_id': str(user_id),
                     'exp': datetime.utcnow() + timedelta(hours=24)
@@ -64,7 +64,7 @@ class Authentication():
         db.auth_token.insert_one(body)
         return token
     
-    def user_logout(token):
+    def user_logout(self, token):
         decoded_token = jwt.decode(token, os.getenv("SECRET_KEY"), algorithms=['HS256'])
         #user_id = decoded_token.get('user_id')
         result = db.auth_token.delete_many({'token': token})
@@ -72,7 +72,7 @@ class Authentication():
             return True
         return False
     
-    def delete_user_login(user_id):
+    def delete_user_login(self, user_id):
         result = db.auth_token.delete_many({'user_id': ObjectId(user_id)})
         if result.deleted_count > 0:
             return True

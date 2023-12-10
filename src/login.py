@@ -22,15 +22,15 @@ class LoginApi(Resource):
             email = data.get('email')
             password = data.get('password')
             
-            Validation.validate_active_customer(customer_code)
+            Validation.validate_active_customer(Validation, customer_code)
             user = db.users.find_one({'customer_code': customer_code, 'email': email})
             if user is None:
                 return {"message": "Invalid user credentials"}, 401
             
             x = db.auth_token.delete_many({"user_id": str(user['_id'])})
             
-            if Auth.authenticate_user(user, password):
-                token = Auth.generate_auth_token(user['_id'])
+            if Auth.authenticate_user(Auth, user, password):
+                token = Auth.generate_auth_token(Auth, user['_id'])
                 return {"message": "Login successful", "token": token, "user_id": str(user['_id'])}, 200
             else:
                 return {"message": "Invalid Password"}, 401
@@ -48,7 +48,7 @@ class LoginApi(Resource):
         
     def delete(self):
         token = request.headers.get('authToken')
-        if Auth.user_logout(token):
+        if Auth.user_logout(Auth, token):
             return {"message": "Logout successful"}, 200
         else:
             return {'error': 'Invalid request'}, 400
@@ -75,9 +75,9 @@ class ResetPasswordApi(Resource):
             user_id = Common.user_id_from_token(Common, key)
             if user_id:
                 user = db.users.find_one({"_id": ObjectId(user_id)})
-                result = Helper.reset_password(user_id, user, new_password)
+                result = Helper.reset_password(Helper, user_id, user, new_password)
                 if result.modified_count == 1:
-                    Auth.delete_user_login(user_id)
+                    Auth.delete_user_login(Auth, user_id)
                     Helper.delete_forgot_password_key(Helper, key)
                     return {'message': 'Password updated successfully'}, 200
                 else:
@@ -92,7 +92,7 @@ class ResetPasswordApi(Resource):
 class ChangePasswordApi(Resource):
     def put(self, id):
         try:
-            user_id = Auth.validate_token(request.headers.get('authToken'))
+            user_id = Auth.validate_token(Auth, request.headers.get('authToken'))
             data = request.get_json()
             new_password = data.get('password')
 
@@ -100,9 +100,9 @@ class ChangePasswordApi(Resource):
                 return {'error': 'Invalid user id'}, 400
             
             user = db.users.find_one({"_id": ObjectId(id)})
-            result = Helper.reset_password(id, user, new_password)
+            result = Helper.reset_password(Helper, id, user, new_password)
             if result.modified_count == 1:
-                Auth.user_logout(request.headers.get('authToken'))
+                Auth.user_logout(Auth, request.headers.get('authToken'))
                 return {'message': 'Password updated successfully'}, 200
             else:
                 return {'error': 'Error in updating password'}, 400
@@ -131,9 +131,9 @@ class Helper():
         db.forgot_password.insert_one(body)
         return key
     
-    def reset_password(user_id, user, new_password):
+    def reset_password(self, user_id, user, new_password):
         if user:
-            user['password'] = Auth.hash_password(new_password)
+            user['password'] = Auth.hash_password(Auth, new_password)
             user['updated_at'] = datetime.now()
             if '_id' in user:
                 del user['_id']

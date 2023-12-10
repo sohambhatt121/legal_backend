@@ -15,7 +15,7 @@ from util.common import Common
 class ClientApi(Resource):
     def get(self):
         try: 
-            user_id = Auth.validate_token(request.headers.get('authToken'))
+            user_id = Auth.validate_token(Auth, request.headers.get('authToken'))
             customer_code = request.args.get('customer_code')
             user_customer_code = Common.get_customer_by_user(Common, user_id)
             if customer_code != user_customer_code:
@@ -38,11 +38,11 @@ class ClientApi(Resource):
 
     def post(self):
         try:
-            user_id = Auth.validate_token(request.headers.get('authToken'))
+            user_id = Auth.validate_token(Auth, request.headers.get('authToken'))
             body = request.get_json()
             client_schema.validate(body)
-            Validation.validate_active_customer(body['customer_code'])
-            Validation.validate_user_customer_relation(user_id, body['customer_code'])
+            Validation.validate_active_customer(Validation, body['customer_code'])
+            Validation.validate_user_customer_relation(Validation, user_id, body['customer_code'])
             body['user_id'] = user_id
             body['created_at'] = datetime.now()
             body['updated_at'] = datetime.now()
@@ -68,11 +68,11 @@ class ClientApi(Resource):
 class ClientsApi(Resource):
     def put(self, id):
         try:
-            user_id = Auth.validate_token(request.headers.get('authToken'))
+            user_id = Auth.validate_token(Auth, request.headers.get('authToken'))
             body = request.get_json()
             client_schema.validate(body)
             data = db.clients.find_one({'_id': ObjectId(id)})
-            Validation.validate_user_customer_relation(user_id, data['customer_code'])
+            Validation.validate_user_customer_relation(Validation, user_id, data['customer_code'])
             body['updated_at'] = datetime.now()
             body['user_id'] = user_id
             if '_id' in body:
@@ -100,9 +100,9 @@ class ClientsApi(Resource):
     
     def delete(self, id):
         try:
-            user_id = Auth.validate_token(request.headers.get('authToken'))
+            user_id = Auth.validate_token(Auth, request.headers.get('authToken'))
             data = db.clients.find_one({'_id': ObjectId(id)})
-            Validation.validate_user_customer_relation(user_id, data['customer_code'])
+            Validation.validate_user_customer_relation(Validation, user_id, data['customer_code'])
             
             result = db.clients.delete_one({'_id': ObjectId(id)})
             if result.deleted_count == 1:
@@ -120,9 +120,9 @@ class ClientsApi(Resource):
 
     def get(self, id):
         try:
-            user_id = Auth.validate_token(request.headers.get('authToken'))
+            user_id = Auth.validate_token(Auth, request.headers.get('authToken'))
             data = db.clients.find_one({'_id': ObjectId(id)})
-            Validation.validate_user_customer_relation(user_id, data['customer_code'])
+            Validation.validate_user_customer_relation(Validation, user_id, data['customer_code'])
             
             if data:
                 data['_id'] = str(data['_id'])
@@ -141,6 +141,3 @@ class ClientsApi(Resource):
             return {'error': str(e)}, 401
         except InvalidCustomerCode as e:
             return {'error': str(e)}, 401
-        
-
-

@@ -14,6 +14,19 @@ user_schema = Schema({
     'status': And(int, Or(0,1,2))
 })
 
+update_user_schema = Schema({
+    'customer_code': And(str, lambda s: len(s.strip()) > 0),
+    'first_name': And(str, lambda s: len(s.strip()) > 0),
+    'middle_name': And(str, lambda s: len(s.strip()) >= 0),
+    'last_name': And(str, lambda s: len(s.strip()) > 0),
+    'address': And(str, lambda s: len(s.strip()) > 0),
+    'aadhar_card': And(str, lambda s: len(s.strip()) > 0),
+    'phone': And(str, lambda s: len(s.strip()) > 0),
+    'email': And(str, lambda s: len(s.strip()) > 0),
+    'role': And(int, Or(1,2,3)),
+    'status': And(int, Or(0,1,2))
+})
+
 users_role = {
     1: "admin",
     2: "operations_manager",
