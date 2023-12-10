@@ -67,9 +67,7 @@ class Authentication():
     def user_logout(token):
         decoded_token = jwt.decode(token, os.getenv("SECRET_KEY"), algorithms=['HS256'])
         user_id = decoded_token.get('user_id')
-        print(user_id)
         result = db.auth_token.delete_many({"user_id": str(user_id)})
-        print(result.deleted_count)
         if result.deleted_count > 0:
             return True
         return False

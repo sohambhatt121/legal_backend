@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 from flask_restful import Api
 from flask_swagger_ui import get_swaggerui_blueprint
 from dotenv import load_dotenv
@@ -9,6 +10,7 @@ import json
 from src.routes import initialize_routes
 
 application = Flask(__name__)
+CORS(application)
 api = Api(application)
 
 # Swagger configuration
