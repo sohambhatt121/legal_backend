@@ -35,6 +35,10 @@ class ClientApi(Resource):
             return {'error': str(e)}, 401
         except UserNotExist as e:
             return {'error': str(e)}, 401
+        except InvaliAuthToken as e:
+            return {'error': str(e)}, 401
+        except AuthTokenExpired as e:
+            return {'error': str(e)}, 401
 
     def post(self):
         try:
@@ -97,6 +101,10 @@ class ClientsApi(Resource):
             return {'error': str(e)}, 401
         except UserNotExist as e:
             return {'error': str(e)}, 401
+        except InvaliAuthToken as e:
+            return {'error': str(e)}, 401
+        except AuthTokenExpired as e:
+            return {'error': str(e)}, 401
     
     def delete(self, id):
         try:
@@ -116,6 +124,10 @@ class ClientsApi(Resource):
         except UserNotExist as e:
             return {'error': str(e)}, 401
         except InvalidCustomerCode as e:
+            return {'error': str(e)}, 401
+        except InvaliAuthToken as e:
+            return {'error': str(e)}, 401
+        except AuthTokenExpired as e:
             return {'error': str(e)}, 401
 
     def get(self, id):
@@ -140,4 +152,8 @@ class ClientsApi(Resource):
         except UserNotExist as e:
             return {'error': str(e)}, 401
         except InvalidCustomerCode as e:
+            return {'error': str(e)}, 401
+        except InvaliAuthToken as e:
+            return {'error': str(e)}, 401
+        except AuthTokenExpired as e:
             return {'error': str(e)}, 401
