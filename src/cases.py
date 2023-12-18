@@ -82,7 +82,11 @@ class CasesApi(Resource):
             body = request.get_json()
             case_schema.validate(body)
             data = db.cases.find_one({'_id': ObjectId(id)})
-            Validation.validate_user_customer_relation(Validation, user_id, data['customer_code'])
+            if data:
+                Validation.validate_user_customer_relation(Validation, user_id, data['customer_code'])
+            else:
+                return {'error': 'Case not found'}, 404
+            
             body['updated_at'] = datetime.now()
             if '_id' in body:
                 del body['_id']
@@ -115,7 +119,10 @@ class CasesApi(Resource):
         try:
             user_id = Auth.validate_token(Auth, request.headers.get('authToken'))
             data = db.cases.find_one({'_id': ObjectId(id)})
-            Validation.validate_user_customer_relation(Validation, user_id, data['customer_code'])
+            if data:
+                Validation.validate_user_customer_relation(Validation, user_id, data['customer_code'])
+            else:
+                return {'error': 'Case not found'}, 404
             
             result = db.cases.delete_one({'_id': ObjectId(id)})
             if result.deleted_count == 1:
@@ -139,9 +146,9 @@ class CasesApi(Resource):
         try:
             user_id = Auth.validate_token(Auth, request.headers.get('authToken'))
             data = db.cases.find_one({'_id': ObjectId(id)})
-            Validation.validate_user_customer_relation(Validation, user_id, data['customer_code'])
             
             if data:
+                Validation.validate_user_customer_relation(Validation, user_id, data['customer_code'])
                 data['_id'] = str(data['_id'])
                 data['created_at'] = str(data['created_at'])
                 data['updated_at'] = str(data['updated_at'])
