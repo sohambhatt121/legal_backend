@@ -1,4 +1,4 @@
-from .exception import CustomerInactive, InvalidCustomerCode, UserInactive, UserNotExist
+from .exception import CustomerInactive, InvalidCustomerCode, UserInactive, UserNotExist, ClientInactive, ClientNotExist
 from database.db import db
 from bson import ObjectId
 
@@ -34,3 +34,13 @@ class Validation():
                 return True
         else:
             raise UserNotExist("User not exist")
+        
+    def validate_active_client(self, client_id):
+        client = db.clients.find_one({"_id": ObjectId(client_id)})
+        if client:
+            if client['status'] == 1:
+                return True
+            else:
+                raise ClientInactive("Client is Inactive")
+        else:
+            raise ClientNotExist("Client not exist")

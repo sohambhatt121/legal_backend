@@ -20,6 +20,10 @@
         {
             "name": "Client",
             "description": "Client APIs"
+        },
+        {
+            "name": "Case",
+            "description": "Case APIs"
         }
     ],
     "paths": {
@@ -958,6 +962,312 @@
               }
             }
           }
+      },
+      "/api/v1/case": {
+        "get": {
+            "summary": "Get all Cases",
+            "tags": ["Case"],
+            "parameters": [
+              {
+                  "name": "authToken",
+                  "in": "header",
+                  "description": "Auth Token",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+              },
+              {
+                "name": "customer_code",
+                "in": "query",
+                "description": "Customer code",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Successful operation",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+        },
+        "post": {
+          "summary": "Create a new case",
+          "tags": ["Case"],
+          "description": "Endpoint to create a new case",
+          "parameters": [
+            {
+                "name": "authToken",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+
+                  "properties": {
+                    "customer_code": { "type": "string" },
+                    "client_id": { "type": "string" },
+                    "title": { "type": "string" },
+                    "Description": { "type": "string" },
+                    "case_type": {
+                      "type": "integer",
+                      "enum": [1, 2, 3, 4, 5, 6, 7, 8]
+                    },
+                    "court_type": {
+                      "type": "integer",
+                      "enum": [1, 2, 3, 4, 5]
+                    },
+                    "status": {
+                      "type": "integer",
+                      "enum": [0, 1, 2]
+                    },
+                    "opposition": {
+                      "type": "object",
+                      "properties": {
+                        "name": { "type": "string" },
+                        "phone": { "type": "string" },
+                        "email": { "type": "string" },
+                        "address": { "type": "string" },
+                        "type": {
+                          "type": "integer",
+                          "enum": [1, 2]
+                        }
+                      }
+                    },
+                    "opposition_lawyer": {
+                      "type": "object",
+                      "properties": {
+                        "name": { "type": "string" },
+                        "phone": { "type": "string" },
+                        "email": { "type": "string" },
+                        "address": { "type": "string" }
+                      }
+                    }
+                  },
+                  "required": [
+                    "customer_code",
+                    "client_id",
+                    "title",
+                    "Description",
+                    "case_type",
+                    "court_type",
+                    "status",
+                    "opposition_lawyer",
+                    "opposition"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Case created successfully"
+            },
+            "400": {
+              "description": "Bad request - Validation error"
+            },
+            "401": {
+                "description": "Unauthorized"
+              }
+          }
+        }
+      },
+      "/api/v1/case/{id}": {
+        "get": {
+          "summary": "Get case by ID",
+          "description": "Retrieve case information by ID",
+          "tags": ["Case"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+                "name": "authToken",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response - Case found"
+            },
+            "404": {
+              "description": "case not found"
+            },
+            "401": {
+                "description": "Unauthorized"
+            }
+          }
+        },
+        "put": {
+          "summary": "Update case by ID",
+          "description": "Update client information by ID",
+          "tags": ["Case"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+                "name": "authToken",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "customer_code": { "type": "string" },
+                    "client_id": { "type": "string" },
+                    "title": { "type": "string" },
+                    "Description": { "type": "string" },
+                    "case_type": {
+                      "type": "integer",
+                      "enum": [1, 2, 3, 4, 5, 6, 7, 8]
+                    },
+                    "court_type": {
+                      "type": "integer",
+                      "enum": [1, 2, 3, 4, 5]
+                    },
+                    "status": {
+                      "type": "integer",
+                      "enum": [0, 1, 2]
+                    },
+                    "opposition": {
+                      "type": "object",
+                      "properties": {
+                        "name": { "type": "string" },
+                        "phone": { "type": "string" },
+                        "email": { "type": "string" },
+                        "address": { "type": "string" },
+                        "type": {
+                          "type": "integer",
+                          "enum": [1, 2]
+                        }
+                      }
+                    },
+                    "opposition_lawyer": {
+                      "type": "object",
+                      "properties": {
+                        "name": { "type": "string" },
+                        "phone": { "type": "string" },
+                        "email": { "type": "string" },
+                        "address": { "type": "string" }
+                      }
+                    }
+                  },
+                  "required": [
+                    "customer_code",
+                    "client_id",
+                    "title",
+                    "Description",
+                    "case_type",
+                    "court_type",
+                    "status",
+                    "opposition_lawyer",
+                    "opposition"
+                  ]
+                }
+              }
+            }
+        },
+        "responses": {
+            "200": {
+            "description": "Case updated successfully"
+            },
+            "404": {
+            "description": "User not found"
+            },
+            "400": {
+            "description": "Invalid request"
+            },
+            "401": {
+            "description": "Unauthorized"
+            }
+          }
+        },
+        "delete": {
+          "summary": "Delete case by ID",
+          "description": "Delete case information by ID",
+          "tags": ["Case"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+                "name": "authToken",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Case deleted successfully"
+            },
+            "404": {
+              "description": "Case not found"
+            },
+            "401": {
+                "description": "Unauthorized"
+              }
+          }
+        }
       }
     }
   }

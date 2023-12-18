@@ -31,4 +31,10 @@ class UserInactive(Exception):
 class UnauthorizedUser(Exception):
     pass
 
+class ClientInactive(Exception):
+    pass
+
+class ClientNotExist(Exception):
+    pass
+
 
