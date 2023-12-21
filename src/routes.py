@@ -3,7 +3,7 @@ from .users import UserApi, UsersApi
 from .login import LoginApi, ForgotPasswordApi, ResetPasswordApi, ChangePasswordApi
 from .clients import ClientApi, ClientsApi
 from .cases import CaseApi, CasesApi
-from .docs import DocApi, DocsApi
+from .docs import DocApi, DocsApi, AccessDocs
 
 def initialize_routes(api):
 
@@ -34,3 +34,4 @@ def initialize_routes(api):
     #doc modle
     api.add_resource(DocApi, '/api/v1/document')
     api.add_resource(DocsApi, '/api/v1/document/<id>')
+    api.add_resource(AccessDocs, '/api/v1/access_document/<id>')

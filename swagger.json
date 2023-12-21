@@ -1399,7 +1399,7 @@
               "description": "Successful response - Document found"
             },
             "404": {
-              "description": "case not found"
+              "description": "Document not found"
             },
             "401": {
                 "description": "Unauthorized"
@@ -1458,7 +1458,7 @@
             "description": "Document updated successfully"
             },
             "404": {
-            "description": "User not found"
+            "description": "Document not found"
             },
             "400": {
             "description": "Invalid request"
@@ -1501,6 +1501,43 @@
             "401": {
                 "description": "Unauthorized"
               }
+          }
+        }
+      },
+      "/api/v1/access_document/{id}": {
+        "get": {
+          "summary": "Get document access",
+          "description": "Get document access",
+          "tags": ["Document"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+                "name": "authToken",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response - Document found"
+            },
+            "404": {
+              "description": "Document not found"
+            },
+            "401": {
+                "description": "Unauthorized"
+            }
           }
         }
       }

@@ -144,6 +144,23 @@ class DocsApi(Resource):
         except Exception as e:
             return {'error': str(e)}, 401
 
+class AccessDocs(Resource):
+    def get(self, id):
+        try:
+            user_id = Auth.validate_token(Auth, request.headers.get('authToken'))
+            data = db.docs.find_one({'_id': ObjectId(id)})
+            if not data:
+                return {'error': message.DocumentNotExist}, 404
+
+            url = S3_Client.get_access(S3_Client, data['file_url'], 3600)
+            return {'url': url}, 200 
+
+        except Exception as e:
+            return {'error': str(e)}, 401
+        
+
+    pass
+
 
 class Helper():
     def get_post_request_body(rself, request):
