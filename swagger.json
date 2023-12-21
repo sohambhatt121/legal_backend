@@ -24,6 +24,10 @@
         {
             "name": "Case",
             "description": "Case APIs"
+        },
+        {
+            "name": "Document",
+            "description": "Document"
         }
     ],
     "paths": {
@@ -1262,6 +1266,237 @@
             },
             "404": {
               "description": "Case not found"
+            },
+            "401": {
+                "description": "Unauthorized"
+              }
+          }
+        }
+      },
+      "/api/v1/document": {
+        "get": {
+            "summary": "Get all documents",
+            "tags": ["Document"],
+            "parameters": [
+              {
+                  "name": "authToken",
+                  "in": "header",
+                  "description": "Auth Token",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+              },
+              {
+                "name": "customer_code",
+                "in": "query",
+                "description": "Customer code",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Successful operation",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+        },
+        "post": {
+          "summary": "Add new document",
+          "tags": ["Document"],
+          "description": "Endpoint to add new document",
+          "parameters": [
+            {
+                "name": "authToken",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+
+                  "properties": {
+                    "title": { "type": "string" },
+                    "note": { "type": "string" },
+                    "customer_code": { "type": "string" },
+                    "case_id": { "type": "string" },
+                    "document": { "type": "string", "format": "binary" }
+                  },
+                  "required": [
+                    "title",
+                    "customer_code",
+                    "case_id",
+                    "document"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Document added successfully"
+            },
+            "400": {
+              "description": "Bad request - Validation error"
+            },
+            "401": {
+                "description": "Unauthorized"
+              }
+          }
+        }
+      },
+      "/api/v1/document/{id}": {
+        "get": {
+          "summary": "Get document by ID",
+          "description": "Retrieve document information by ID",
+          "tags": ["Document"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+                "name": "authToken",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response - Document found"
+            },
+            "404": {
+              "description": "case not found"
+            },
+            "401": {
+                "description": "Unauthorized"
+            }
+          }
+        },
+        "put": {
+          "summary": "Update document by ID",
+          "description": "Update document information by ID",
+          "tags": ["Document"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+                "name": "authToken",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+            "multipart/form-data": {
+                "schema": {
+                    "type": "object",
+
+                    "properties": {
+                    "title": { "type": "string" },
+                    "note": { "type": "string" },
+                    "customer_code": { "type": "string" },
+                    "case_id": { "type": "string" },
+                    "document": { "type": "string", "format": "binary" }
+                    },
+                    "required": [
+                    "title",
+                    "customer_code",
+                    "case_id",
+                    "document"
+                    ]
+                }
+            }
+            }
+        },
+        "responses": {
+            "200": {
+            "description": "Document updated successfully"
+            },
+            "404": {
+            "description": "User not found"
+            },
+            "400": {
+            "description": "Invalid request"
+            },
+            "401": {
+            "description": "Unauthorized"
+            }
+          }
+        },
+        "delete": {
+          "summary": "Delete document by ID",
+          "description": "Delete document information by ID",
+          "tags": ["Document"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+                "name": "authToken",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Docuemnt deleted successfully"
+            },
+            "404": {
+              "description": "Docuemnt not found"
             },
             "401": {
                 "description": "Unauthorized"

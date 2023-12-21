@@ -6,8 +6,7 @@ from bson import ObjectId
 from database.db import db
 from database.clients import client_schema
 from util.authentication import Authentication as Auth
-from util.exception import NotAdminException, InvalidCustomerCode, CustomerInactive, AuthTokenExpired
-from util.exception import UserNotExist, UserInactive, InvaliAuthToken, UnauthorizedUser
+from util.exception import ExceptionMessages as message
 from datetime import datetime
 from util.validation import Validation
 from util.common import Common
@@ -19,7 +18,7 @@ class ClientApi(Resource):
             customer_code = request.args.get('customer_code')
             user_customer_code = Common.get_customer_by_user(Common, user_id)
             if customer_code != user_customer_code:
-                raise UnauthorizedUser("User is UnAthorized")
+                raise Exception(message.UnauthorizedUser)
             
             clients = list(db.clients.find({'customer_code': customer_code}))
             for item in clients:
@@ -27,17 +26,7 @@ class ClientApi(Resource):
                 item['created_at'] = str(item['created_at'])
                 item['updated_at'] = str(item['updated_at'])
             return {'data': clients}, 200
-        except NotAdminException as e:
-            return {'error': str(e)}, 401
-        except UnauthorizedUser as e:
-            return {'error': str(e)}, 401
-        except UserInactive as e:
-            return {'error': str(e)}, 401
-        except UserNotExist as e:
-            return {'error': str(e)}, 401
-        except InvaliAuthToken as e:
-            return {'error': str(e)}, 401
-        except AuthTokenExpired as e:
+        except Exception as e:
             return {'error': str(e)}, 401
 
     def post(self):
@@ -53,20 +42,8 @@ class ClientApi(Resource):
             client =  db.clients.insert_one(body)
             return {'message': 'Client added successfully', "id": str(client.inserted_id)}, 201
         except SchemaError as e:
-            return {'error': 'Invalid request data', 'details': str(e)}, 400
-        except NotAdminException as e:
-            return {'error': str(e)}, 401
-        except CustomerInactive as e:
-            return {'error': str(e)}, 401
-        except InvalidCustomerCode as e:
-            return {'error': str(e)}, 401
-        except AuthTokenExpired as e:
-            return {'error': str(e)}, 401
-        except InvaliAuthToken as e:
-            return {'error': str(e)}, 401
-        except UserInactive as e:
-            return {'error': str(e)}, 401
-        except UserNotExist as e:
+            return {'error': message.InvalidRequestSchema, 'details': str(e)}, 400
+        except Exception as e:
             return {'error': str(e)}, 401
         
 class ClientsApi(Resource):
@@ -79,7 +56,7 @@ class ClientsApi(Resource):
             if data:
                 Validation.validate_user_customer_relation(Validation, user_id, data['customer_code'])
             else:
-                return {'error': 'Client not found'}, 404
+                return {'error': message.ClientNotExist}, 404
             
             body['updated_at'] = datetime.now()
             if '_id' in body:
@@ -90,23 +67,11 @@ class ClientsApi(Resource):
             if result.modified_count == 1:
                 return {'message': 'User updated successfully'}, 200
             else:
-                return {'error': 'User not found'}, 404
+                return {'error': message.UserNotExist}, 404
         
         except SchemaError as e:
-            return {'error': 'Invalid request data', 'details': str(e)}, 400
-        except NotAdminException as e:
-            return {'error': str(e)}, 401
-        except CustomerInactive as e:
-            return {'error': str(e)}, 401
-        except InvalidCustomerCode as e:
-            return {'error': str(e)}, 401
-        except UserInactive as e:
-            return {'error': str(e)}, 401
-        except UserNotExist as e:
-            return {'error': str(e)}, 401
-        except InvaliAuthToken as e:
-            return {'error': str(e)}, 401
-        except AuthTokenExpired as e:
+            return {'error': message.InvalidRequestSchema, 'details': str(e)}, 400
+        except Exception as e:
             return {'error': str(e)}, 401
     
     def delete(self, id):
@@ -116,24 +81,14 @@ class ClientsApi(Resource):
             if data:
                 Validation.validate_user_customer_relation(Validation, user_id, data['customer_code'])
             else:
-                return {'error': 'Client not found'}, 404
+                return {'error': message.ClientNotExist}, 404
             
             result = db.clients.delete_one({'_id': ObjectId(id)})
             if result.deleted_count == 1:
                 return {'message': 'Client deleted successfully'}, 200
             else:
-                return {'error': 'Client not found'}, 404
-        except NotAdminException as e:
-            return {'error': str(e)}, 401
-        except UserInactive as e:
-            return {'error': str(e)}, 401
-        except UserNotExist as e:
-            return {'error': str(e)}, 401
-        except InvalidCustomerCode as e:
-            return {'error': str(e)}, 401
-        except InvaliAuthToken as e:
-            return {'error': str(e)}, 401
-        except AuthTokenExpired as e:
+                return {'error': message.ClientNotExist}, 404
+        except Exception as e:
             return {'error': str(e)}, 401
 
     def get(self, id):
@@ -148,18 +103,6 @@ class ClientsApi(Resource):
                 data['updated_at'] = str(data['updated_at'])
                 return {'data': data}, 200
             else:
-                return {'error': 'Client not found'}, 404
-        except NotAdminException as e:
-            return {'error': str(e)}, 401
-        except UnauthorizedUser as e:
-            return {'error': str(e)}, 401
-        except UserInactive as e:
-            return {'error': str(e)}, 401
-        except UserNotExist as e:
-            return {'error': str(e)}, 401
-        except InvalidCustomerCode as e:
-            return {'error': str(e)}, 401
-        except InvaliAuthToken as e:
-            return {'error': str(e)}, 401
-        except AuthTokenExpired as e:
+                return {'error': message.ClientNotExist}, 404
+        except Exception as e:
             return {'error': str(e)}, 401

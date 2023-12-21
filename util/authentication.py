@@ -1,6 +1,7 @@
 import os
 import bcrypt
-from util.exception import NotAdminException, UserInactive, UserNotExist, AuthTokenExpired, InvaliAuthToken
+from util.exception import InvaliAuthToken
+from util.exception import ExceptionMessages as message
 from database.db import db
 from util.validation import Validation
 import jwt
@@ -14,25 +15,26 @@ class Authentication():
         if token == os.getenv("ADMIN_KEY"):
             return True
         else:
-            raise NotAdminException("User is not an admin " + str(temp) + str(token))
+            raise Exception(message.NotAdminException)
         
     def validate_token(self, token):
-        if token == os.getenv("ADMIN_KEY"):
-            return True
-        
-        token_details = db.auth_token.find_one({'token': token})
-        if token_details:
+        try:
+            if token == os.getenv("ADMIN_KEY"):
+                return True
+            
+            token_details = db.auth_token.find_one({'token': token})
+            if token_details is None:
+                raise InvaliAuthToken(message.InvaliAuthToken)
+            
             decoded_token = jwt.decode(token, os.getenv("SECRET_KEY"), algorithms=['HS256'])
             user_id = decoded_token.get('user_id')
-            token_exp = decoded_token.get('exp')
-            current_time = datetime.utcnow()
-            Validation.validate_active_user(Validation, user_id)
-            if current_time < datetime.utcfromtimestamp(token_exp):
-                return user_id
-            else:
-                raise AuthTokenExpired("Token has expired")
-        else:
-            raise InvaliAuthToken("Invalid Auth Token")
+            return user_id
+                
+        except InvaliAuthToken as e:
+            raise Exception(message.InvaliAuthToken)
+        except Exception as e:
+            raise Exception(message.AuthTokenExpired)
+        
 
     def hash_password(self, password):
         salt = bcrypt.gensalt()
@@ -45,11 +47,11 @@ class Authentication():
     def authenticate_user(self, user, password):
         if user:
             if user['status'] != 1:
-                raise UserInactive("User is not active")
+                raise Exception(message.UserInactive)
             
             return bcrypt.checkpw(password.encode('utf-8'), user['password'])
         else:
-            raise UserNotExist("User Not Exist")
+            raise Exception(message.UserNotExist)
         
     def generate_auth_token(self, user_id):
         token = jwt.encode({

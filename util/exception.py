@@ -1,40 +1,22 @@
-class NotAdminException(Exception):
-    pass
+class ExceptionMessages:
+    NotAdminException = "User is not an admin"
+    CustomerInactive = "Customer is inactive"
+    InvalidCustomerCode = "Invalid Customer Code"
+    CustomerNotExist = "Customer not exist"
+    UserNotExist = "User not exist"
+    UserInactive = "User is inactive"
+    InvalidPassword = "Invalid Password"
+    AuthTokenExpired = "Auth token expired"
+    InvaliAuthToken = "Invalid Auth token"
+    UnauthorizedUser = "Unauthorized User"
+    ClientInactive = "Client is Inactive"
+    ClientNotExist = "Clinet not exist"
+    FileUploadFail = "File uploading is fail"
+    InvalidRequestSchema = "Invalid request data"
+    CaseNotExist = "Case not exist"
+    DocumentNotExist = "Document not exist"
+    
 
-class CustomerInactive(Exception):
-    pass
-
-class InvalidCustomerCode(Exception):
-    pass
-
-class UserNotExist(Exception):
-    pass
-
-class UserInactive(Exception):
-    pass
-
-class InvalidPassword(Exception):
-    pass
-
-class AuthTokenExpired(Exception):
-    pass
 
 class InvaliAuthToken(Exception):
     pass
-
-class UserNotExist(Exception):
-    pass
-
-class UserInactive(Exception):
-    pass
-
-class UnauthorizedUser(Exception):
-    pass
-
-class ClientInactive(Exception):
-    pass
-
-class ClientNotExist(Exception):
-    pass
-
-

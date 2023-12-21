@@ -1,4 +1,4 @@
-from .exception import CustomerInactive, InvalidCustomerCode, UserInactive, UserNotExist
+from util.exception import ExceptionMessages as message
 from database.db import db
 from bson import ObjectId
 import jwt
@@ -19,4 +19,4 @@ class Common():
         if user:
             return user['customer_code']
         else:
-            raise UserNotExist("User not exist")
+            raise Exception(message.UserNotExist)

@@ -6,7 +6,7 @@ from bson import ObjectId
 from database.db import db
 from database.customers import customer_schema
 from util.authentication import Authentication as Auth
-from util.exception import NotAdminException
+from util.exception import ExceptionMessages as message
 from datetime import datetime
 
 class CustomersApi(Resource):
@@ -20,7 +20,7 @@ class CustomersApi(Resource):
                 item['created_at'] = str(item['created_at'])
                 item['updated_at'] = str(item['updated_at'])
             return {'data': customers}, 200
-        except NotAdminException as e:
+        except Exception as e:
             return {'error': str(e)}, 401
 
     def post(self):
@@ -33,8 +33,8 @@ class CustomersApi(Resource):
             customers =  db.customers.insert_one(body)
             return {'message': 'Data added successfully', "id": str(customers.inserted_id)}, 201
         except SchemaError as e:
-            return {'error': 'Invalid request data', 'details': str(e)}, 400
-        except NotAdminException as e:
+            return {'error': message.InvalidRequestSchema, 'details': str(e)}, 400
+        except Exception as e:
             return {'error': str(e)}, 401
         
 class CustomerApi(Resource):
@@ -52,11 +52,11 @@ class CustomerApi(Resource):
             if result.modified_count == 1:
                 return {'message': 'Data updated successfully'}, 200
             else:
-                return {'error': 'Data not found'}, 404
+                return {'error': message.CustomerNotExist}, 404
         
         except SchemaError as e:
-            return {'error': 'Invalid request data', 'details': str(e)}, 400
-        except NotAdminException as e:
+            return {'error': message.InvalidRequestSchema, 'details': str(e)}, 400
+        except Exception as e:
             return {'error': str(e)}, 401
     
     def delete(self, id):
@@ -66,8 +66,8 @@ class CustomerApi(Resource):
             if result.deleted_count == 1:
                 return {'message': 'Data deleted successfully'}, 200
             else:
-                return {'error': 'Data not found'}, 404
-        except NotAdminException as e:
+                return {'error': message.CustomerNotExist}, 404
+        except Exception as e:
             return {'error': str(e)}, 401
 
     def get(self, id):
@@ -80,8 +80,8 @@ class CustomerApi(Resource):
                 data['updated_at'] = str(data['updated_at'])
                 return {'data': data}, 200
             else:
-                return {'error': 'Data not found'}, 404
-        except NotAdminException as e:
+                return {'error': message.CustomerNotExist}, 404
+        except Exception as e:
             return {'error': str(e)}, 401
         
 class CustomerCodeApi(Resource):
@@ -95,8 +95,8 @@ class CustomerCodeApi(Resource):
                 data['updated_at'] = str(data['updated_at'])
                 return {'data': data}, 200
             else:
-                return {'error': 'Data not found'}, 404
-        except NotAdminException as e:
+                return {'error': message.CustomerNotExist}, 404
+        except Exception as e:
             return {'error': str(e)}, 401
         
 class Helper():

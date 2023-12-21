@@ -6,7 +6,7 @@ import os
 
 from database.db import db
 from util.authentication import Authentication as Auth
-from util.exception import InvalidCustomerCode, CustomerInactive, UserNotExist, UserInactive, AuthTokenExpired, InvaliAuthToken
+from util.exception import ExceptionMessages as message
 from datetime import datetime
 from util.validation import Validation
 from util.common import Common
@@ -36,14 +36,8 @@ class LoginApi(Resource):
                 return {"message": "Invalid Password"}, 401
             
         except SchemaError as e:
-            return {'error': 'Invalid request data', 'details': str(e)}, 400
-        except UserNotExist as e:
-            return {'error': str(e)}, 401
-        except CustomerInactive as e:
-            return {'error': str(e)}, 401
-        except InvalidCustomerCode as e:
-            return {'error': str(e)}, 404
-        except UserInactive as e:
+            return {'error': message.InvalidRequestSchema, 'details': str(e)}, 400
+        except Exception as e:
             return {'error': str(e)}, 401
         
     def delete(self):
@@ -58,12 +52,12 @@ class ForgotPasswordApi(Resource):
         try:
             user = db.users.find_one({"email": email})
             if not user:
-                raise UserNotExist("Invalid User Email")
+                raise Exception("Invalid User Email")
             
             key = Helper.generate_forgot_password_key(Helper, user['_id'])
             return {"message": "Forgot Password Key", "key": key}, 200
 
-        except UserNotExist as e:
+        except Exception as e:
             return {'error': str(e)}, 401
         
 class ResetPasswordApi(Resource):
@@ -83,11 +77,11 @@ class ResetPasswordApi(Resource):
                 else:
                     return {'error': 'Error in updating password'}, 400
             else:
-                raise UserNotExist("User not found")
+                raise Exception(message.UserNotExist)
         except SchemaError as e:
-            return {'error': 'Invalid request data', 'details': str(e)}, 400
-        except UserNotExist as e:
-            return {'error': str(e)}, 404
+            return {'error': message.InvalidRequestSchema, 'details': str(e)}, 400
+        except Exception as e:
+            return {'error': str(e)}, 401
         
 class ChangePasswordApi(Resource):
     def put(self, id):
@@ -107,14 +101,8 @@ class ChangePasswordApi(Resource):
             else:
                 return {'error': 'Error in updating password'}, 400
         except SchemaError as e:
-            return {'error': 'Invalid request data', 'details': str(e)}, 400
-        except UserNotExist as e:
-            return {'error': str(e)}, 404
-        except AuthTokenExpired as e:
-            return {'error': str(e)}, 401
-        except InvaliAuthToken as e:
-            return {'error': str(e)}, 401
-        except UserInactive as e:
+            return {'error': message.InvalidRequestSchema, 'details': str(e)}, 400
+        except Exception as e:
             return {'error': str(e)}, 401
         
 class Helper():
@@ -141,7 +129,7 @@ class Helper():
             result = db.users.update_one({'_id': ObjectId(user_id)}, {'$set': user})
             return result
         else:
-            raise UserNotExist("User not found")
+            raise Exception(message.UserNotExist)
         
     def delete_forgot_password_key(self, key):
         result = db.forgot_password.delete_many({'key': key})

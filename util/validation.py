@@ -1,4 +1,4 @@
-from .exception import CustomerInactive, InvalidCustomerCode, UserInactive, UserNotExist, ClientInactive, ClientNotExist
+from util.exception import ExceptionMessages as message
 from database.db import db
 from bson import ObjectId
 
@@ -9,9 +9,9 @@ class Validation():
             if customer['status'] == 1:
                 return True
             else:
-                raise CustomerInactive("Customer is Inactive")
+                raise Exception(message.CustomerInactive)
         else:
-            raise InvalidCustomerCode("Invalid Customer Code")
+            raise Exception(message.InvalidCustomerCode)
         
     def validate_active_user(self, user_id):
         user = db.users.find_one({'_id': ObjectId(user_id)})
@@ -19,21 +19,21 @@ class Validation():
             if user['status'] == 1:
                 return True
             else:
-                raise UserInactive("Customer is Inactive")
+                raise Exception(message.CustomerInactive)
         else:
-            raise UserNotExist("Invalid Customer Code")
+            raise Exception(message.InvalidCustomerCode)
         
     def validate_user_customer_relation(self, user_id, customer_code):
         user = db.users.find_one({"_id": ObjectId(user_id)})
         if user:
             if user['status'] != 1:
-                raise UserInactive("User is Inactive")
+                raise Exception(message.UserInactive)
             elif user['customer_code'] != customer_code:
-                raise InvalidCustomerCode("Unauthorized User")
+                raise Exception(message.UnauthorizedUser)
             else:
                 return True
         else:
-            raise UserNotExist("User not exist")
+            raise Exception(message.UserNotExist)
         
     def validate_active_client(self, client_id):
         client = db.clients.find_one({"_id": ObjectId(client_id)})
@@ -41,6 +41,6 @@ class Validation():
             if client['status'] == 1:
                 return True
             else:
-                raise ClientInactive("Client is Inactive")
+                raise Exception(message.ClientInactive)
         else:
-            raise ClientNotExist("Client not exist")
+            raise Exception(message.ClientNotExist)
