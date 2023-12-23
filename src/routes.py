@@ -4,6 +4,7 @@ from .login import LoginApi, ForgotPasswordApi, ResetPasswordApi, ChangePassword
 from .clients import ClientApi, ClientsApi
 from .cases import CaseApi, CasesApi
 from .docs import DocApi, DocsApi, AccessDocs
+from .notes import NoteApi, NotesApi
 
 def initialize_routes(api):
 
@@ -35,3 +36,7 @@ def initialize_routes(api):
     api.add_resource(DocApi, '/api/v1/document')
     api.add_resource(DocsApi, '/api/v1/document/<id>')
     api.add_resource(AccessDocs, '/api/v1/access_document/<id>')
+
+    #notes modle
+    api.add_resource(NoteApi, '/api/v1/note')
+    api.add_resource(NotesApi, '/api/v1/note/<id>')

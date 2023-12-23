@@ -1603,6 +1603,292 @@
             }
           }
         }
+      },
+      "/api/v1/note": {
+        "get": {
+            "summary": "Get all notes",
+            "tags": ["Note"],
+            "parameters": [
+              {
+                  "name": "authToken",
+                  "in": "header",
+                  "description": "Auth Token",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+              },
+              {
+                "name": "customer_code",
+                "in": "query",
+                "description": "Customer code",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "case_id",
+                "in": "query",
+                "description": "Case Id",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "added_by",
+                "in": "query",
+                "description": "Added by",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "per_page",
+                "in": "query",
+                "description": "Per page",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "page_number",
+                "in": "query",
+                "description": "Page Number",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "sort_by",
+                "in": "query",
+                "description": "Sort by (column name)",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "order",
+                "in": "query",
+                "description": "Order by (asc, desc)",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Successful operation",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object"
+                          }
+                        },
+                        "current_page": {
+                          "type": "integer"
+                        },
+                        "total": {
+                          "type": "integer"
+                        },
+                        "per_page": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+        },
+        "post": {
+          "summary": "Add new Note",
+          "tags": ["Note"],
+          "description": "Endpoint to add new note",
+          "parameters": [
+            {
+                "name": "authToken",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "customer_code": { "type": "string" },
+                    "case_id": { "type": "string" },
+                    "note": { "type": "string" }
+                  },
+                  "required": [
+                    "customer_code",
+                    "case_id",
+                    "note"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Notes added successfully"
+            },
+            "400": {
+              "description": "Bad request - Validation error"
+            },
+            "401": {
+                "description": "Unauthorized"
+              }
+          }
+        }
+      },
+      "/api/v1/note/{id}": {
+        "get": {
+          "summary": "Get notes by ID",
+          "description": "Get case notes by ID",
+          "tags": ["Note"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+                "name": "authToken",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response - Note found"
+            },
+            "404": {
+              "description": "Note not found"
+            },
+            "401": {
+                "description": "Unauthorized"
+            }
+          }
+        },
+        "put": {
+          "summary": "Update note by ID",
+          "description": "Update note by ID",
+          "tags": ["Note"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+                "name": "authToken",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "customer_code": { "type": "string" },
+                    "case_id": { "type": "string" },
+                    "note": { "type": "string" }
+                  },
+                  "required": [
+                    "customer_code",
+                    "case_id",
+                    "note"
+                  ]
+                }
+              }
+            }
+        },
+        "responses": {
+            "200": {
+            "description": "Note updated successfully"
+            },
+            "404": {
+            "description": "Note not found"
+            },
+            "400": {
+            "description": "Invalid request"
+            },
+            "401": {
+            "description": "Unauthorized"
+            }
+          }
+        },
+        "delete": {
+          "summary": "Delete note by ID",
+          "description": "Delete note information by ID",
+          "tags": ["Note"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+                "name": "authToken",
+                "in": "header",
+                "description": "Auth Token",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Note deleted successfully"
+            },
+            "404": {
+              "description": "Note not found"
+            },
+            "401": {
+                "description": "Unauthorized"
+              }
+          }
+        }
       }
     }
   }

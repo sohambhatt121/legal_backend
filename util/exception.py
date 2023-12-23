@@ -15,6 +15,7 @@ class ExceptionMessages:
     InvalidRequestSchema = "Invalid request data"
     CaseNotExist = "Case not exist"
     DocumentNotExist = "Document not exist"
+    NotesNotExist = "Notes not exist"
     
 
 
