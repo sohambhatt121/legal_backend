@@ -12,8 +12,8 @@ class S3_Client:
             's3',
             aws_access_key_id=S3_ACCESS_KEY,
             aws_secret_access_key=S3_SECRET_KEY,
-            region_name=S3_REGION,
-            config=boto3.session.Config(signature_version='s3v4')
+            region_name=S3_REGION#,
+            #config=boto3.session.Config(signature_version='s3v4')
         )
 
     def upload(self, file, folder_name, file_name):

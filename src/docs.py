@@ -2,6 +2,7 @@ from flask import request
 from flask_restful import Resource
 from schema import  SchemaError
 from bson import ObjectId
+from flask import jsonify
 
 import uuid
 from database.db import db
@@ -22,12 +23,8 @@ class DocApi(Resource):
             if customer_code != user_customer_code:
                 raise Exception(message.UnauthorizedUser)
             
-            docs = list(db.docs.find({'customer_code': customer_code}))
-            for item in docs:
-                item['_id'] = str(item['_id'])
-                item['created_at'] = str(item['created_at'])
-                item['updated_at'] = str(item['updated_at'])
-            return {'data': docs}, 200
+            docs = Helper.list_documents(Helper, request)
+            return docs
         except Exception as e:
             return {'error': str(e)}, 401
 
@@ -70,7 +67,6 @@ class DocsApi(Resource):
             body = Helper.get_post_request_body(Helper, request)
             doc_schema.validate(body)
             file = request.files['document']
-            #print("here")
             data = db.docs.find_one({'_id': ObjectId(id)})
             print(data)
             if data:
@@ -135,6 +131,8 @@ class DocsApi(Resource):
             
             if data:
                 Validation.validate_user_customer_relation(Validation, user_id, data['customer_code'])
+                case_data = db.cases.find_one({'_id': ObjectId(data['case_id'])})
+                data['case_title'] = case_data['title'] if case_data else ''
                 data['_id'] = str(data['_id'])
                 data['created_at'] = str(data['created_at'])
                 data['updated_at'] = str(data['updated_at'])
@@ -163,10 +161,86 @@ class AccessDocs(Resource):
 
 
 class Helper():
-    def get_post_request_body(rself, request):
+    def get_post_request_body(self, request):
         body = {}
         body['title'] = request.form['title']
         body['note'] = request.form['note']
         body['customer_code'] = request.form['customer_code']
         body['case_id'] = request.form['case_id']
         return body
+    
+    def list_documents(self, request):
+        customer_code = request.args.get('customer_code')
+        case_id = request.args.get('case_id')
+        added_by = request.args.get('added_by')
+        per_page = int(request.args.get('per_page', 10))
+        page_number = int(request.args.get('page_number', 1))
+        sort_by = request.args.get('sort_by', '_id')
+        order = request.args.get('order', 'asc')
+
+        match_stage = {}
+        if case_id:
+            match_stage['case_id'] = case_id
+        if added_by:
+            match_stage['added_by'] = added_by
+        if customer_code:
+            match_stage['customer_code'] = customer_code
+
+
+        pipeline = [
+            {
+                '$match': match_stage
+            },
+            {
+                '$addFields': {
+                    'case_id_ObjectId': {
+                        '$toObjectId': '$case_id'
+                    }
+                }
+            },
+            {
+                '$lookup': {
+                    'from': 'cases',
+                    'localField': 'case_id_ObjectId',
+                    'foreignField': '_id',
+                    'as': 'case_info'
+                }
+            },
+            {
+                '$unwind': '$case_info'
+            },
+            {
+                '$project': {
+                    '_id': 1,
+                    'title': 1,
+                    'note': 1,
+                    'case_title': '$case_info.title',
+                    'customer_code': 1,
+                    'case_id': 1,
+                    'added_by': 1,
+                    'created_at': 1,
+                    'updated_at': 1,
+                    'file_url': 1
+                }
+            },
+            {'$sort': {sort_by: 1 if order == 'asc' else -1}},
+            {'$skip': (page_number - 1) * per_page},
+            {'$limit': per_page}
+        ]
+
+        documents = db.docs.aggregate(pipeline)
+
+        total = db.docs.count_documents(match_stage)
+        document_list = list(documents)
+        for item in document_list:
+            item['_id'] = str(item['_id'])
+            item['created_at'] = str(item['created_at'])
+            item['updated_at'] = str(item['updated_at'])
+        
+        return jsonify({
+            'data': document_list,
+            'per_page': per_page,
+            'current_page': page_number,
+            'total': total
+        })
+

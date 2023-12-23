@@ -1295,6 +1295,60 @@
                 "schema": {
                     "type": "string"
                 }
+              },
+              {
+                "name": "case_id",
+                "in": "query",
+                "description": "Case Id",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "added_by",
+                "in": "query",
+                "description": "Added by",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "per_page",
+                "in": "query",
+                "description": "Per page",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "page_number",
+                "in": "query",
+                "description": "Page Number",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "sort_by",
+                "in": "query",
+                "description": "Sort by (column name)",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "order",
+                "in": "query",
+                "description": "Order by (asc, desc)",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
               }
             ],
             "responses": {
@@ -1310,6 +1364,15 @@
                           "items": {
                             "type": "object"
                           }
+                        },
+                        "current_page": {
+                          "type": "integer"
+                        },
+                        "total": {
+                          "type": "integer"
+                        },
+                        "per_page": {
+                          "type": "integer"
                         }
                       }
                     }
