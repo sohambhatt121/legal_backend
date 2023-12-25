@@ -9,18 +9,13 @@ from util.authentication import Authentication as Auth
 from util.exception import ExceptionMessages as message
 from util.validation import Validation
 from datetime import datetime
+from util.common import Common
 
 class UsersApi(Resource):
     def get(self):
         try: 
             Auth.check_admin_access(Auth, request.headers.get('authToken'))
-            users = list(db.users.find())
-            for item in users:
-                item['_id'] = str(item['_id'])
-                item['created_at'] = str(item['created_at'])
-                item['updated_at'] = str(item['updated_at'])
-                del item['password']
-            return {'data': users}, 200
+            return Common.get_list(Common, request, db.users)
         except Exception as e:
             return {'error': str(e)}, 401
 

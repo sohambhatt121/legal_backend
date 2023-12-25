@@ -20,12 +20,7 @@ class ClientApi(Resource):
             if customer_code != user_customer_code:
                 raise Exception(message.UnauthorizedUser)
             
-            clients = list(db.clients.find({'customer_code': customer_code}))
-            for item in clients:
-                item['_id'] = str(item['_id'])
-                item['created_at'] = str(item['created_at'])
-                item['updated_at'] = str(item['updated_at'])
-            return {'data': clients}, 200
+            return Common.get_list(Common, request, db.clients)
         except Exception as e:
             return {'error': str(e)}, 401
 

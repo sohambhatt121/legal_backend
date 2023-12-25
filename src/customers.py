@@ -8,18 +8,13 @@ from database.customers import customer_schema
 from util.authentication import Authentication as Auth
 from util.exception import ExceptionMessages as message
 from datetime import datetime
+from util.common import Common
 
 class CustomersApi(Resource):
     def get(self):
         try: 
             Auth.check_admin_access(Auth, request.headers.get('authToken'))
-            query = Helper.get_query_params(Helper, request.args)
-            customers = list(db.customers.find(query))
-            for item in customers:
-                item['_id'] = str(item['_id'])
-                item['created_at'] = str(item['created_at'])
-                item['updated_at'] = str(item['updated_at'])
-            return {'data': customers}, 200
+            return Common.get_list(Common, request, db.customers)
         except Exception as e:
             return {'error': str(e)}, 401
 
@@ -98,21 +93,3 @@ class CustomerCodeApi(Resource):
                 return {'error': message.CustomerNotExist}, 404
         except Exception as e:
             return {'error': str(e)}, 401
-        
-class Helper():
-    def get_query_params(self, args):
-        query = {}
-        query['status'] = self.get_status(self, args.get('status'))
-        return query
-    
-    def get_status(self, status):
-        if status is None:
-            result = 1
-        elif status == '3':
-            result = {"$in":[0,1]}
-        elif status == '4':
-            result = {"$in":[0,1,2]}
-        else:
-            result = int(status) 
-
-        return result

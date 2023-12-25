@@ -22,7 +22,7 @@ class NoteApi(Resource):
             if customer_code != user_customer_code:
                 raise Exception(message.UnauthorizedUser)
             
-            return Helper.list_notes(Helper, request)
+            return Common.get_list(Common, request, db.notes)
         except Exception as e:
             return {'error': str(e)}, 401
 
@@ -109,34 +109,3 @@ class NotesApi(Resource):
                 return {'error': message.NotesNotExist}, 404
         except Exception as e:
             return {'error': str(e)}, 401
-
-
-class Helper():    
-    def list_notes(self, request):
-        per_page = int(request.args.get('per_page', 10))
-        page_number = int(request.args.get('page_number', 1))
-        sort_by = request.args.get('sort_by', '_id')
-        order = request.args.get('order', 'asc')
-
-        match_stage = Common.prepare_filter(Common, request)
-
-        pipeline = [
-            {'$match': match_stage},
-            {'$sort': {sort_by: 1 if order == 'asc' else -1}},
-            {'$skip': (page_number - 1) * per_page},
-            {'$limit': per_page}
-        ]
-
-        notes = db.notes.aggregate(pipeline)
-
-        total = db.notes.count_documents(match_stage)
-        notes_list = list(notes)
-        Common.make_JSON_serializable(Common, notes_list)
-        
-        return jsonify({
-            'data': notes_list,
-            'per_page': per_page,
-            'current_page': page_number,
-            'total': total
-        })
-

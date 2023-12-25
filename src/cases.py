@@ -21,7 +21,7 @@ class CaseApi(Resource):
             if customer_code != user_customer_code:
                 raise Exception(message.UnauthorizedUser)
             
-            return Helper.list_cases(Helper, request)
+            return Common.get_list(Common, request, db.cases)
         except Exception as e:
             return {'error': str(e)}, 401
 

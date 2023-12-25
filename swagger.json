@@ -28,7 +28,11 @@
         {
             "name": "Document",
             "description": "Document"
-        }
+        },
+        {
+          "name": "Note",
+          "description": "Note"
+      }
     ],
     "paths": {
       "/api/v1/customer": {
@@ -47,11 +51,74 @@
             {
                 "name": "status",
                 "in": "query",
-                "description": "Status (0: inactive, 1: active (default), 2: deleted, 3: active+inactive, 4: all)",
+                "description": "Status (0: Inactive, 1: Active (default), 2: Deleted, -1: None Deleted, -2: All)",
                 "required": false,
                 "schema": {
                     "type": "integer"
                 }
+            },
+            {
+              "name": "name",
+              "in": "query",
+              "description": "name",
+              "required": false,
+              "schema": {
+                  "type": "string"
+              }
+            },
+            {
+              "name": "contact_name",
+              "in": "query",
+              "description": "Contact person name",
+              "required": false,
+              "schema": {
+                  "type": "string"
+              }
+            },
+            {
+              "name": "customer_code",
+              "in": "query",
+              "description": "Customer Code",
+              "required": false,
+              "schema": {
+                  "type": "string"
+              }
+            },
+            {
+              "name": "per_page",
+              "in": "query",
+              "description": "Per page",
+              "required": false,
+              "schema": {
+                  "type": "string"
+              }
+            },
+            {
+              "name": "page_number",
+              "in": "query",
+              "description": "Page Number",
+              "required": false,
+              "schema": {
+                  "type": "string"
+              }
+            },
+            {
+              "name": "sort_by",
+              "in": "query",
+              "description": "Sort by (column name)",
+              "required": false,
+              "schema": {
+                  "type": "string"
+              }
+            },
+            {
+              "name": "order",
+              "in": "query",
+              "description": "Order by (asc, desc)",
+              "required": false,
+              "schema": {
+                  "type": "string"
+              }
             }
           ],
           "responses": {
@@ -67,6 +134,15 @@
                         "items": {
                           "type": "object"
                         }
+                      },
+                      "current_page": {
+                        "type": "integer"
+                      },
+                      "total": {
+                        "type": "integer"
+                      },
+                      "per_page": {
+                        "type": "integer"
                       }
                     }
                   }
@@ -329,6 +405,60 @@
                   "schema": {
                     "type": "string"
                   }
+              },
+              {
+                "name": "status",
+                "in": "query",
+                "description": "Status (0: Inactive, 1: Active (default), 2: Deleted, -1: None Deleted, -2: All)",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+              },
+              {
+                "name": "role",
+                "in": "query",
+                "description": "Status (1: admin, 2: operation manager, 3: employee, 4: all (default))",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+              },
+              {
+                "name": "per_page",
+                "in": "query",
+                "description": "Per page",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "page_number",
+                "in": "query",
+                "description": "Page Number",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "sort_by",
+                "in": "query",
+                "description": "Sort by (column name)",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "order",
+                "in": "query",
+                "description": "Order by (asc, desc)",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
               }
             ],
             "responses": {
@@ -344,6 +474,15 @@
                           "items": {
                             "type": "object"
                           }
+                        },
+                        "current_page": {
+                          "type": "integer"
+                        },
+                        "total": {
+                          "type": "integer"
+                        },
+                        "per_page": {
+                          "type": "integer"
                         }
                       }
                     }
@@ -623,6 +762,87 @@
                 "schema": {
                     "type": "string"
                 }
+              },
+              {
+                "name": "status",
+                "in": "query",
+                "description": "Status (0: Inactive, 1: Active (default), 2: Deleted, -1: None Deleted, -2: All)",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+              },
+              {
+                "name": "client_type",
+                "in": "query",
+                "description": "Client Type (1: individual, 2: corporate, 3: All (default))",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+              },
+              {
+                "name": "name",
+                "in": "query",
+                "description": "Name",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "contact_person_name",
+                "in": "query",
+                "description": "Contact Person Name",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "added_by",
+                "in": "query",
+                "description": "added_by",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "per_page",
+                "in": "query",
+                "description": "Per page",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "page_number",
+                "in": "query",
+                "description": "Page Number",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "sort_by",
+                "in": "query",
+                "description": "Sort by (column name)",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "order",
+                "in": "query",
+                "description": "Order by (asc, desc)",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
               }
             ],
             "responses": {
@@ -638,6 +858,15 @@
                           "items": {
                             "type": "object"
                           }
+                        },
+                        "current_page": {
+                          "type": "integer"
+                        },
+                        "total": {
+                          "type": "integer"
+                        },
+                        "per_page": {
+                          "type": "integer"
                         }
                       }
                     }
@@ -1047,7 +1276,7 @@
               {
                 "name": "status",
                 "in": "query",
-                "description": "Status",
+                "description": "Status (0: inactive, 1: active (default), 2: deleted, -1: all)",
                 "required": false,
                 "schema": {
                     "type": "integer"
@@ -1103,6 +1332,15 @@
                           "items": {
                             "type": "object"
                           }
+                        },
+                        "current_page": {
+                          "type": "integer"
+                        },
+                        "total": {
+                          "type": "integer"
+                        },
+                        "per_page": {
+                          "type": "integer"
                         }
                       }
                     }
