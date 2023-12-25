@@ -18,6 +18,5 @@ class ExceptionMessages:
     NotesNotExist = "Notes not exist"
     
 
-
 class InvaliAuthToken(Exception):
     pass

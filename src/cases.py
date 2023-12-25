@@ -2,6 +2,7 @@ from flask import request
 from flask_restful import Resource
 from schema import  SchemaError
 from bson import ObjectId
+from flask import jsonify
 
 from database.db import db
 from database.cases import case_schema
@@ -20,12 +21,7 @@ class CaseApi(Resource):
             if customer_code != user_customer_code:
                 raise Exception(message.UnauthorizedUser)
             
-            cases = list(db.cases.find({'customer_code': customer_code}))
-            for item in cases:
-                item['_id'] = str(item['_id'])
-                item['created_at'] = str(item['created_at'])
-                item['updated_at'] = str(item['updated_at'])
-            return {'data': cases}, 200
+            return Helper.list_cases(Helper, request)
         except Exception as e:
             return {'error': str(e)}, 401
 
@@ -109,3 +105,32 @@ class CasesApi(Resource):
                 return {'error': message.CaseNotExist}, 404
         except Exception as e:
             return {'error': str(e)}, 401
+        
+class Helper():    
+    def list_cases(self, request):
+        per_page = int(request.args.get('per_page', 10))
+        page_number = int(request.args.get('page_number', 1))
+        sort_by = request.args.get('sort_by', '_id')
+        order = request.args.get('order', 'asc')
+
+        match_stage = Common.prepare_filter(Common, request)
+        
+        pipeline = [
+            {'$match': match_stage},
+            {'$sort': {sort_by: 1 if order == 'asc' else -1}},
+            {'$skip': (page_number - 1) * per_page},
+            {'$limit': per_page}
+        ]
+
+        cases = db.cases.aggregate(pipeline)
+
+        total = db.cases.count_documents(match_stage)
+        cases_list = list(cases)
+        Common.make_JSON_serializable(Common, cases_list)
+        
+        return jsonify({
+            'data': cases_list,
+            'per_page': per_page,
+            'current_page': page_number,
+            'total': total
+        })

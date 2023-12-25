@@ -23,8 +23,7 @@ class DocApi(Resource):
             if customer_code != user_customer_code:
                 raise Exception(message.UnauthorizedUser)
             
-            docs = Helper.list_documents(Helper, request)
-            return docs
+            return Helper.list_documents(Helper, request)
         except Exception as e:
             return {'error': str(e)}, 401
 
@@ -170,27 +169,15 @@ class Helper():
         return body
     
     def list_documents(self, request):
-        customer_code = request.args.get('customer_code')
-        case_id = request.args.get('case_id')
-        added_by = request.args.get('added_by')
         per_page = int(request.args.get('per_page', 10))
         page_number = int(request.args.get('page_number', 1))
         sort_by = request.args.get('sort_by', '_id')
         order = request.args.get('order', 'asc')
 
-        match_stage = {}
-        if case_id:
-            match_stage['case_id'] = case_id
-        if added_by:
-            match_stage['added_by'] = added_by
-        if customer_code:
-            match_stage['customer_code'] = customer_code
-
+        match_stage = Common.prepare_filter(Common, request)
 
         pipeline = [
-            {
-                '$match': match_stage
-            },
+            { '$match': match_stage},
             {
                 '$addFields': {
                     'case_id_ObjectId': {
@@ -232,10 +219,7 @@ class Helper():
 
         total = db.docs.count_documents(match_stage)
         document_list = list(documents)
-        for item in document_list:
-            item['_id'] = str(item['_id'])
-            item['created_at'] = str(item['created_at'])
-            item['updated_at'] = str(item['updated_at'])
+        Common.make_JSON_serializable(Common, document_list)
         
         return jsonify({
             'data': document_list,

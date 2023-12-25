@@ -989,6 +989,105 @@
                 "schema": {
                     "type": "string"
                 }
+              },
+              {
+                "name": "client_id",
+                "in": "query",
+                "description": "Client id",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "opposition_name",
+                "in": "query",
+                "description": "Opposition Name",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "opposition_lawyer_name",
+                "in": "query",
+                "description": "Opposition Lawyer Name",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "case_type",
+                "in": "query",
+                "description": "Case Type",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+              },
+              {
+                "name": "court_type",
+                "in": "query",
+                "description": "Court Type",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+              },
+              {
+                "name": "added_by",
+                "in": "query",
+                "description": "Added by",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "status",
+                "in": "query",
+                "description": "Status",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+              },
+              {
+                "name": "per_page",
+                "in": "query",
+                "description": "Per page",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "page_number",
+                "in": "query",
+                "description": "Page Number",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "sort_by",
+                "in": "query",
+                "description": "Sort by (column name)",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+              },
+              {
+                "name": "order",
+                "in": "query",
+                "description": "Order by (asc, desc)",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
               }
             ],
             "responses": {

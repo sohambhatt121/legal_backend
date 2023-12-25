@@ -1,4 +1,4 @@
-from schema import Schema, And, Or
+from schema import Schema, And
 
 note_schema = Schema({
     'customer_code': And(str, lambda s: len(s.strip()) > 0),
