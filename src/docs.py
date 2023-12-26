@@ -174,7 +174,7 @@ class Helper():
         sort_by = request.args.get('sort_by', '_id')
         order = request.args.get('order', 'asc')
 
-        match_stage = Common.prepare_filter(Common, request)
+        match_stage = Common.prepare_filter(Common, request, db.docs)
 
         pipeline = [
             { '$match': match_stage},
