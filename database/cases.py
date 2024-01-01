@@ -1,4 +1,4 @@
-from schema import Schema, And, Or
+from schema import Schema, And, Or, Optional
 
 case_schema = Schema({
     'customer_code': And(str, lambda s: len(s.strip()) > 0),
@@ -16,6 +16,28 @@ case_schema = Schema({
         'type': And(int, Or(1,2))
     },
     'opposition_lawyer': {
+        'name': And(str, lambda s: len(s.strip()) > 0),
+        'phone': And(str, lambda s: len(s.strip()) >= 0),
+        'email': And(str, lambda s: len(s.strip()) >= 0),
+        'address': And(str, lambda s: len(s.strip()) >= 0),
+    }
+})
+
+update_case_schema = Schema({
+    Optional('client_id'): And(str, lambda s: len(s.strip()) > 0),
+    Optional('title'): And(str, lambda s: len(s.strip()) > 0),
+    Optional('Description'): And(str, lambda s: len(s.strip()) > 0),
+    Optional('case_type'): And(int, Or(1,2,3,4,5,6,7,8)),
+    Optional('court_type'): And(int, Or(1,2,3,4,5)),
+    Optional('status'): And(int, Or(0,1,2)),
+    Optional('opposition'): {
+        'name': And(str, lambda s: len(s.strip()) > 0),
+        'phone': And(str, lambda s: len(s.strip()) >= 0),
+        'email': And(str, lambda s: len(s.strip()) >= 0),
+        'address': And(str, lambda s: len(s.strip()) >= 0),
+        'type': And(int, Or(1,2))
+    },
+    Optional('opposition_lawyer'): {
         'name': And(str, lambda s: len(s.strip()) > 0),
         'phone': And(str, lambda s: len(s.strip()) >= 0),
         'email': And(str, lambda s: len(s.strip()) >= 0),

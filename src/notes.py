@@ -6,7 +6,7 @@ from flask import jsonify
 
 import uuid
 from database.db import db
-from database.notes import note_schema
+from database.notes import note_schema, update_note_schema
 from util.authentication import Authentication as Auth
 from util.exception import ExceptionMessages as message
 from datetime import datetime
@@ -51,19 +51,14 @@ class NotesApi(Resource):
         try:
             user_id = Auth.validate_token(Auth, request.headers.get('authToken'))
             body = request.get_json()
-            #note_schema.validate(body)
+            update_note_schema.validate(body)
             data = db.notes.find_one({'_id': ObjectId(id)})
-            print(data)
             if data:
-                Validation.validate_active_customer(Validation, body['customer_code'])
                 Validation.validate_user_customer_relation(Validation, user_id, data['customer_code'])
             else:
                 return {'error': message.NotesNotExist}, 404
             
             body['updated_at'] = datetime.now()
-            if '_id' in body:
-                del body['_id']
-            
             result = db.notes.update_one({'_id': ObjectId(id)}, {'$set': body})
             
             if result.modified_count == 1:

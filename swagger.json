@@ -615,7 +615,6 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "customer_code": { "type": "string" },
                     "first_name": { "type": "string" },
                     "middle_name": { "type": "string" },
                     "last_name": { "type": "string" },
@@ -1005,7 +1004,6 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "customer_code": { "type": "string" },
                     "name": { "type": "string" },
                     "address": { "type": "string" },
                     "contact_person": {
@@ -1020,14 +1018,7 @@
                     },
                     "client_type": { "type": "integer" },
                     "status": { "type": "integer" }
-                  },
-                  "required": [
-                    "customer_code",
-                    "name",
-                    "contact_person",
-                    "client_type",
-                    "status"
-                  ]
+                  }
                 }
               }
             }
@@ -1506,7 +1497,6 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "customer_code": { "type": "string" },
                     "client_id": { "type": "string" },
                     "title": { "type": "string" },
                     "Description": { "type": "string" },
@@ -1544,18 +1534,7 @@
                         "address": { "type": "string" }
                       }
                     }
-                  },
-                  "required": [
-                    "customer_code",
-                    "client_id",
-                    "title",
-                    "Description",
-                    "case_type",
-                    "court_type",
-                    "status",
-                    "opposition_lawyer",
-                    "opposition"
-                  ]
+                  }
                 }
               }
             }
@@ -1835,26 +1814,18 @@
             "content": {
             "multipart/form-data": {
                 "schema": {
-                    "type": "object",
-
-                    "properties": {
+                  "type": "object",
+                  "properties": {
                     "title": { "type": "string" },
                     "note": { "type": "string" },
-                    "customer_code": { "type": "string" },
                     "case_id": { "type": "string" },
                     "document": { "type": "string", "format": "binary" }
-                    },
-                    "required": [
-                    "title",
-                    "customer_code",
-                    "case_id",
-                    "document"
-                    ]
+                  }
                 }
+              }
             }
-            }
-        },
-        "responses": {
+          },
+          "responses": {
             "200": {
             "description": "Document updated successfully"
             },
@@ -2164,15 +2135,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "customer_code": { "type": "string" },
                     "case_id": { "type": "string" },
                     "note": { "type": "string" }
-                  },
-                  "required": [
-                    "customer_code",
-                    "case_id",
-                    "note"
-                  ]
+                  }
                 }
               }
             }

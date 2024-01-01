@@ -6,7 +6,7 @@ from flask import jsonify
 
 import uuid
 from database.db import db
-from database.docs import doc_schema
+from database.docs import doc_schema, update_doc_schema
 from util.authentication import Authentication as Auth
 from util.exception import ExceptionMessages as message
 from datetime import datetime
@@ -64,18 +64,15 @@ class DocsApi(Resource):
         try:
             user_id = Auth.validate_token(Auth, request.headers.get('authToken'))
             body = Helper.get_post_request_body(Helper, request)
-            #doc_schema.validate(body)
+            update_doc_schema.validate(body)
             file = request.files['document']
             data = db.docs.find_one({'_id': ObjectId(id)})
             if data:
-                Validation.validate_active_customer(Validation, body['customer_code'])
                 Validation.validate_user_customer_relation(Validation, user_id, data['customer_code'])
             else:
                 return {'error': message.DocumentNotExist}, 404
             
             body['updated_at'] = datetime.now()
-            if '_id' in body:
-                del body['_id']
             
             if file:
                 old_file = data['file_url']

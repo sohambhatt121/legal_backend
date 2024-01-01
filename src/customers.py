@@ -4,7 +4,7 @@ from schema import  SchemaError
 from bson import ObjectId
 
 from database.db import db
-from database.customers import customer_schema
+from database.customers import customer_schema, update_customer_schema
 from util.authentication import Authentication as Auth
 from util.exception import ExceptionMessages as message
 from datetime import datetime
@@ -37,10 +37,8 @@ class CustomerApi(Resource):
         try:
             Auth.check_admin_access(Auth, request.headers.get('authToken'))
             body = request.get_json()
-            customer_schema.validate(body)
+            update_customer_schema.validate(body)
             body['updated_at'] = datetime.now()
-            if '_id' in body:
-                del body['_id']
             
             result = db.customers.update_one({'_id': ObjectId(id)}, {'$set': body})
             
