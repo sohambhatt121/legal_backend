@@ -40,7 +40,7 @@ class UserApi(Resource):
         try:
             Auth.check_admin_access(Auth, request.headers.get('authToken'))
             body = request.get_json()
-            update_user_schema.validate(body)
+            #update_user_schema.validate(body)
             Validation.validate_active_customer(Validation, body['customer_code'])
             body['updated_at'] = datetime.now()
             if '_id' in body:

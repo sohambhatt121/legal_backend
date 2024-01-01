@@ -46,7 +46,7 @@ class ClientsApi(Resource):
         try:
             user_id = Auth.validate_token(Auth, request.headers.get('authToken'))
             body = request.get_json()
-            client_schema.validate(body)
+            #client_schema.validate(body)
             data = db.clients.find_one({'_id': ObjectId(id)})
             if data:
                 Validation.validate_user_customer_relation(Validation, user_id, data['customer_code'])

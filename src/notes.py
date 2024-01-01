@@ -51,7 +51,7 @@ class NotesApi(Resource):
         try:
             user_id = Auth.validate_token(Auth, request.headers.get('authToken'))
             body = request.get_json()
-            note_schema.validate(body)
+            #note_schema.validate(body)
             data = db.notes.find_one({'_id': ObjectId(id)})
             print(data)
             if data:

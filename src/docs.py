@@ -64,10 +64,9 @@ class DocsApi(Resource):
         try:
             user_id = Auth.validate_token(Auth, request.headers.get('authToken'))
             body = Helper.get_post_request_body(Helper, request)
-            doc_schema.validate(body)
+            #doc_schema.validate(body)
             file = request.files['document']
             data = db.docs.find_one({'_id': ObjectId(id)})
-            print(data)
             if data:
                 Validation.validate_active_customer(Validation, body['customer_code'])
                 Validation.validate_user_customer_relation(Validation, user_id, data['customer_code'])
@@ -154,10 +153,6 @@ class AccessDocs(Resource):
 
         except Exception as e:
             return {'error': str(e)}, 401
-        
-
-    pass
-
 
 class Helper():
     def get_post_request_body(self, request):
