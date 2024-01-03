@@ -65,7 +65,10 @@ class DocsApi(Resource):
             user_id = Auth.validate_token(Auth, request.headers.get('authToken'))
             body = Helper.get_post_request_body(Helper, request)
             update_doc_schema.validate(body)
-            file = request.files['document']
+            file = None
+            if 'document' in request.files:
+                file = request.files['document']
+            
             data = db.docs.find_one({'_id': ObjectId(id)})
             if data:
                 Validation.validate_user_customer_relation(Validation, user_id, data['customer_code'])
@@ -89,7 +92,7 @@ class DocsApi(Resource):
                 body['file_url'] = f"{folder_name}/{file_name}"
             
             result = db.docs.update_one({'_id': ObjectId(id)}, {'$set': body})
-            
+            print(result)            
             if result.modified_count == 1:
                 return {'message': 'Document updated successfully'}, 200
             else:
@@ -156,7 +159,8 @@ class Helper():
         body = {}
         body['title'] = request.form['title']
         body['note'] = request.form['note']
-        body['customer_code'] = request.form['customer_code']
+        if 'customer_code' in request.form:
+            body['customer_code'] = request.form['customer_code']
         body['case_id'] = request.form['case_id']
         return body
     
