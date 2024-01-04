@@ -63,7 +63,7 @@ class DocsApi(Resource):
     def put(self, id):
         try:
             user_id = Auth.validate_token(Auth, request.headers.get('authToken'))
-            body = Helper.get_post_request_body(Helper, request)
+            body = Helper.get_put_request_body(Helper, request)
             update_doc_schema.validate(body)
             file = None
             if 'document' in request.files:
@@ -85,14 +85,16 @@ class DocsApi(Resource):
                 else:
                     file_name = f"{str(uuid.uuid4())}"
                 
-                folder_name = f"documents/{body['case_id']}"
+                if 'case_id' in body:
+                    folder_name = f"documents/{body['case_id']}"
+                else:
+                    folder_name = f"documents/{data['case_id']}"
                 
                 S3_Client.upload(S3_Client, file, folder_name, file_name)
                 S3_Client.delete(S3_Client, old_file)
                 body['file_url'] = f"{folder_name}/{file_name}"
             
-            result = db.docs.update_one({'_id': ObjectId(id)}, {'$set': body})
-            print(result)            
+            result = db.docs.update_one({'_id': ObjectId(id)}, {'$set': body})           
             if result.modified_count == 1:
                 return {'message': 'Document updated successfully'}, 200
             else:
@@ -159,9 +161,18 @@ class Helper():
         body = {}
         body['title'] = request.form['title']
         body['note'] = request.form['note']
-        if 'customer_code' in request.form:
-            body['customer_code'] = request.form['customer_code']
+        body['customer_code'] = request.form['customer_code']
         body['case_id'] = request.form['case_id']
+        return body
+    
+    def get_put_request_body(self, request):
+        body = {}
+        if 'title' in request.form and request.form['title'] != "":
+            body['title'] = request.form['title']
+        if 'note' in request.form and request.form['note'] != "":
+            body['note'] = request.form['note']
+        if 'case_id' in request.form and request.form['case_id'] != "":
+            body['case_id'] = request.form['case_id']
         return body
     
     def list_documents(self, request):
