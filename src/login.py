@@ -27,7 +27,8 @@ class LoginApi(Resource):
             if user is None:
                 return {"message": "Invalid user credentials"}, 401
             
-            x = db.auth_token.delete_many({"user_id": str(user['_id'])})
+            # this line is for not allowing multiple login
+            #x = db.auth_token.delete_many({"user_id": str(user['_id'])})
             
             if Auth.authenticate_user(Auth, user, password):
                 token = Auth.generate_auth_token(Auth, user['_id'])

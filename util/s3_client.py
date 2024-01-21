@@ -12,15 +12,24 @@ class S3_Client:
             's3',
             aws_access_key_id=S3_ACCESS_KEY,
             aws_secret_access_key=S3_SECRET_KEY,
-            region_name=S3_REGION#,
-            #config=boto3.session.Config(signature_version='s3v4')
+            region_name=S3_REGION
         )
 
-    def upload(self, file, folder_name, file_name):
+    def upload(self, file, folder_name, file_name, content_type):
         try:
             self.init_client_obj(self)
-            self.s3_client_obj.upload_fileobj(file, S3_BUCKET, f"{folder_name}/{file_name}")
-            #return f"https://{S3_BUCKET}.s3.amazonaws.com/{folder_name}/{file_name}"
+            #print(content_type)
+            self.s3_client_obj.put_object(
+                Body=file,
+                Bucket=S3_BUCKET,
+                Key=f"{folder_name}/{file_name}",
+                ContentDisposition='inline',
+                ContentType=content_type,
+                ACL='public-read'
+            )
+            
+            # Refer this url for all args: https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/put_object.html#
+
         except Exception as e:
             raise Exception(str(e))
     
@@ -33,16 +42,20 @@ class S3_Client:
         
     def get_access(self, file_name, expiry):
         try:
+            url = "https://"+S3_BUCKET+".s3.amazonaws.com/"+file_name
+            return url
+            
+            """
             self.init_client_obj(self)
-            response = self.s3_client_obj.generate_presigned_url(
+            response = self.s3_client_obj.getSignedUrlPromise(
                 'get_object',
                 Params={
                     'Bucket': S3_BUCKET,
                     'Key': file_name,
                     'ResponseContentDisposition': 'inline'
-                },
-                ExpiresIn = expiry
+                }
             )
             return response
+            """
         except Exception as e:
             return str(e)

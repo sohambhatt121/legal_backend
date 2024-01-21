@@ -16,6 +16,7 @@ class ExceptionMessages:
     CaseNotExist = "Case not exist"
     DocumentNotExist = "Document not exist"
     NotesNotExist = "Notes not exist"
+    FileTypeNotAllowed = "File type not allowed"
     
 
 class InvaliAuthToken(Exception):

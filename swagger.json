@@ -1410,9 +1410,7 @@
                     "Description",
                     "case_type",
                     "court_type",
-                    "status",
-                    "opposition_lawyer",
-                    "opposition"
+                    "status"
                   ]
                 }
               }

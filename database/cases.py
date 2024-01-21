@@ -8,14 +8,14 @@ case_schema = Schema({
     'case_type' : And(int, Or(1,2,3,4,5,6,7,8)),
     'court_type': And(int, Or(1,2,3,4,5)),
     'status': And(int, Or(0,1,2)),
-    'opposition': {
+    Optional('opposition'): {
         'name': And(str, lambda s: len(s.strip()) > 0),
         'phone': And(str, lambda s: len(s.strip()) >= 0),
         'email': And(str, lambda s: len(s.strip()) >= 0),
         'address': And(str, lambda s: len(s.strip()) >= 0),
         'type': And(int, Or(1,2))
     },
-    'opposition_lawyer': {
+    Optional('opposition_lawyer'): {
         'name': And(str, lambda s: len(s.strip()) > 0),
         'phone': And(str, lambda s: len(s.strip()) >= 0),
         'email': And(str, lambda s: len(s.strip()) >= 0),

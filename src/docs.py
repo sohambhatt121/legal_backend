@@ -5,6 +5,8 @@ from bson import ObjectId
 from flask import jsonify
 
 import uuid
+import magic
+import mimetypes
 from database.db import db
 from database.docs import doc_schema, update_doc_schema
 from util.authentication import Authentication as Auth
@@ -46,7 +48,9 @@ class DocApi(Resource):
                 file_name = f"{str(uuid.uuid4())}"
             folder_name = f"documents/{body['case_id']}"
 
-            S3_Client.upload(S3_Client, file, folder_name, file_name)
+            file_type = Helper.get_file_content_type(file)
+
+            S3_Client.upload(S3_Client, file, folder_name, file_name, file_type)
             body['file_url'] = f"{folder_name}/{file_name}"
             body['added_by'] = user_id
             body['created_at'] = datetime.now()
@@ -175,6 +179,13 @@ class Helper():
             body['case_id'] = request.form['case_id']
         return body
     
+    def get_file_content_type(file):
+        specific_content_type, _ = mimetypes.guess_type(file.filename)
+        if specific_content_type:
+            return specific_content_type
+        else:
+            raise Exception(message.FileTypeNotAllowed)
+
     def list_documents(self, request):
         per_page = int(request.args.get('per_page', 10))
         page_number = int(request.args.get('page_number', 1))

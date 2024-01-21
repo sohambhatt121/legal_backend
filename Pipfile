@@ -15,6 +15,7 @@ pyjwt = "*"
 pipreqs = "*"
 flask-cors = "*"
 boto3 = "*"
+python-magic = "*"
 
 [dev-packages]
 
