@@ -94,7 +94,8 @@ class DocsApi(Resource):
                 else:
                     folder_name = f"documents/{data['case_id']}"
                 
-                S3_Client.upload(S3_Client, file, folder_name, file_name)
+                file_type = Helper.get_file_content_type(file)
+                S3_Client.upload(S3_Client, file, folder_name, file_name, file_type)
                 S3_Client.delete(S3_Client, old_file)
                 body['file_url'] = f"{folder_name}/{file_name}"
             
