@@ -35,7 +35,7 @@ update_case_schema = Schema({
         'phone': And(str, lambda s: len(s.strip()) >= 0),
         'email': And(str, lambda s: len(s.strip()) >= 0),
         'address': And(str, lambda s: len(s.strip()) >= 0),
-        'type': And(int, Or(1,2))
+        'type': And(int, Or(0,1,2))
     },
     Optional('opposition_lawyer'): {
         'name': And(str, lambda s: len(s.strip()) > 0),

@@ -1519,7 +1519,7 @@
                         "address": { "type": "string" },
                         "type": {
                           "type": "integer",
-                          "enum": [1, 2]
+                          "enum": [0, 1, 2]
                         }
                       }
                     },

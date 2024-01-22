@@ -56,7 +56,6 @@ class CasesApi(Resource):
                 return {'error': message.CaseNotExist}, 404
             
             body['updated_at'] = datetime.now()
-            
             result = db.cases.update_one({'_id': ObjectId(id)}, {'$set': body})
             
             if result.modified_count == 1:
