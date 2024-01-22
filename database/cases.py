@@ -9,17 +9,17 @@ case_schema = Schema({
     'court_type': And(int, Or(1,2,3,4,5)),
     'status': And(int, Or(0,1,2)),
     Optional('opposition'): {
-        'name': And(str, lambda s: len(s.strip()) > 0),
-        'phone': And(str, lambda s: len(s.strip()) >= 0),
-        'email': And(str, lambda s: len(s.strip()) >= 0),
-        'address': And(str, lambda s: len(s.strip()) >= 0),
-        'type': And(int, Or(1,2))
+        Optional('name'): And(str, lambda s: len(s.strip()) > 0),
+        Optional('phone'): And(str, lambda s: len(s.strip()) >= 0),
+        Optional('email'): And(str, lambda s: len(s.strip()) >= 0),
+        Optional('address'): And(str, lambda s: len(s.strip()) >= 0),
+        Optional('type'): And(int, Or(1,2))
     },
     Optional('opposition_lawyer'): {
-        'name': And(str, lambda s: len(s.strip()) > 0),
-        'phone': And(str, lambda s: len(s.strip()) >= 0),
-        'email': And(str, lambda s: len(s.strip()) >= 0),
-        'address': And(str, lambda s: len(s.strip()) >= 0),
+        Optional('name'): And(str, lambda s: len(s.strip()) > 0),
+        Optional('phone'): And(str, lambda s: len(s.strip()) >= 0),
+        Optional('email'): And(str, lambda s: len(s.strip()) >= 0),
+        Optional('address'): And(str, lambda s: len(s.strip()) >= 0),
     }
 })
 
